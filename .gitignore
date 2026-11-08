@@ -1,0 +1,20 @@
+# LaTeX build artefacts
+*.aux
+*.log
+*.out
+*.toc
+*.synctex.gz
+
+# Python / R
+__pycache__/
+*.pyc
+.RData
+.Rhistory
+
+# macOS
+.DS_Store
+._*
+
+# Data: never commit raw inputs (see data/README.md)
+data/*
+!data/README.md
