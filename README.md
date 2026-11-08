@@ -14,9 +14,9 @@ resistance. The answer differs by layer.
 
 | Layer | Result |
 |---|---|
-| Colocalisation | 503 gene–locus tests in five tissues; **3** exceed PP.H4 > 0.8, two at 17q21.32 and one at 15q15.2 |
+| Colocalisation | 503 gene–locus tests in five tissues; 3 exceed PP.H4 > 0.8 at the primary prior, but only the **17q21.32** signal survives a change of risk dataset |
 | Programme validity | An obesity-derived programme (862 genes) tracks clamp-defined insulin resistance weakly: rank correlation **+0.10** (p = 0.004), 61.6% sign concordance among responsive genes |
-| Incremental value | **ΔAUC = +0.0004** over a base clinical model (p = 0.15, 145 tumours, 45 events) |
+| Incremental value | **ΔAUC = +0.0004** over a base clinical model (95% CI −0.014 to +0.031; p = 0.15, 145 tumours, 45 events); no evidence of value, but increments up to ~0.03 not excluded |
 | Single cell | 141,316 cells, 29,592 epithelial; programme score does not separate malignant from normal epithelium (z = −3.8, below the prespecified bar) |
 
 The shared signal at 17q21.32 is the only positive genetic finding: at the lead eQTL
@@ -24,6 +24,17 @@ variant the allele that lowers *SKAP1* expression raises endometrial cancer risk
 (liver, PP.H4 = 0.93; 2,805 variants in window; ρ = −0.66 between expression and risk
 z-scores). The same allele shifts *SKAP1* expression by −0.25 in pancreas and −0.24 in
 spleen, but not in adipose, uterus, ovary or blood.
+
+Two robustness checks constrain how that finding may be stated, and both are reported in
+the paper. First, the credible set at this locus spans **57 variants**, with the most
+probable single variant carrying 4% posterior weight, so the analysis identifies a shared
+*signal* rather than a variant. Second, posteriors depend on the prior: across p12 from
+1e-6 to 1e-4 the number of tests above 0.8 ranges from 0 to 7, and at the stricter prior
+none is called. A signal at 15q15.2 that exceeded the threshold in the primary analysis
+fell to PP.H4 = 0.15 with PP.H3 = 0.85 against the preregistered risk dataset, and is not
+reported as a finding. The two risk datasets share the Endometrial Cancer Association
+Consortium, so agreement between them is consistency across a change of dataset, not
+independent replication.
 
 ## Repository layout
 
@@ -37,7 +48,9 @@ code/
   05_figures/          figure generation (Figures 1–4)
 config.py, config.R    path configuration
 results/
-  tables/              seven derived tables reported in the paper
+  tables/              derived tables reported in the paper, including the prior-sweep
+                       (coloc_robustness.tsv), dual-outcome (coloc_omara_confirm.tsv)
+                       and bootstrap (incremental_boot.tsv) outputs
   figures/             Figures 1–4 as vector PDF, with PNG previews in figures/png/
 data/
   README.md            every input, its accession, and how to obtain it
