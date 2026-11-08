@@ -1,5 +1,7 @@
 # Shared variation at 17q21.32 in endometrial cancer and the limits of obesity-derived transcriptional signatures as proxies for insulin resistance
 
+[![DOI](https://img.shields.io/badge/DOI-10.5281%2Fzenodo.24055114-003399.svg)](https://doi.org/10.5281/zenodo.24055114)
+
 Replication package for a preregistered, public-data-only analysis with three layers:
 genetic colocalisation, bulk transcriptional validation, and single-cell projection.
 
@@ -81,5 +83,11 @@ MIT. See `LICENSE`.
 
 ## Citation
 
-If you use this code or the derived tables, please cite the paper (reference to be
-added on publication) and this repository.
+If you use this code or the derived tables, please cite the paper (reference to be added on
+publication) and the archived package:
+
+> Hu T, Mo Q, Chen P, Xu C, Wang Y, Sun Q, Zhu T. Replication package: shared risk variant at
+> 17q21.32 in endometrial cancer and the limits of obesity-derived transcriptional signatures as
+> proxies for insulin resistance. Zenodo. https://doi.org/10.5281/zenodo.24055114
+
+The DOI above is the concept DOI and always resolves to the most recent version.
