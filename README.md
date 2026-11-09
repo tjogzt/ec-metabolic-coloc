@@ -48,6 +48,8 @@ code/
   05_figures/          figure generation (Figures 1–4)
 config.py, config.R    path configuration
 results/
+  script_inputs/       exact inputs the figure scripts consume (so `code/05_figures`
+                       reproduces the shipped figures without any other download)
   tables/              derived tables reported in the paper, including the prior-sweep
                        (coloc_robustness.tsv), dual-outcome (coloc_omara_confirm.tsv)
                        and bootstrap (incremental_boot.tsv) outputs

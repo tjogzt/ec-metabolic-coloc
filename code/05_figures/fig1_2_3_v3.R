@@ -47,7 +47,7 @@ theme_ec <- function(base = 8.5) {
 }
 
 ## ---------------- 数据 ----------------
-d <- read.delim(file.path(ROOT, "results/coloc_ramach_all.tsv"))
+d <- read.delim(file.path(ROOT, "results/script_inputs/coloc_ramach_all.tsv"))
 parts <- do.call(rbind, strsplit(d$locus, ":"))
 d$chr <- as.integer(parts[, 1]); d$pos <- as.integer(parts[, 2])
 d$loc_lab <- sprintf("%s:%.0f", d$chr, d$pos / 1e6)
@@ -79,17 +79,18 @@ pA <- ggplot(d, aes(loc_lab, PP.H4)) +
              alpha = 0.85) +
   geom_point(data = untested, aes(loc_lab, y = 0), shape = 4, size = 1.5,
              colour = "grey60", inherit.aes = FALSE) +
-  annotate("text", x = 0.65, y = 0.83, label = "0.8 threshold", size = 2.7,
+  annotate("text", x = 0.65, y = 0.83, label = "0.8 threshold", size = 3.4,
            colour = GREY, hjust = 0, vjust = 0) +
   scale_colour_manual(values = TIS_COL, labels = TIS_LAB, name = NULL) +
   scale_size_continuous(range = c(0.7, 3.0), guide = "none") +
   scale_y_continuous(limits = c(0, 1.0), breaks = seq(0, 1, 0.2)) +
   labs(title = sprintf("A   Shared causal variation across %d risk loci", length(levels(d$loc_lab))),
-       subtitle = sprintf("%d tests; point size = matched variants; \u00d7 = not tested (%d of %d locus-tissue cells)",
+       subtitle = sprintf("%d tests; point size = matched variants\n\u00d7 = not tested (%d of %d locus-tissue cells)",
                           nrow(d), n_cells - n_tested, n_cells),
        x = "Locus (chromosome:position, Mb)", y = "PP.H4 (shared causal variant)") +
-  theme_ec() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7.8))
+  theme_ec(9.6) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 9.6),
+        plot.subtitle = element_text(lineheight = 1.35))
 
 ## ---------------- Fig 1B ----------------
 top <- subset(d, PP.H4 > 0.5)
@@ -107,8 +108,8 @@ pB <- ggplot(top, aes(PP.H4, lab)) +
   scale_x_continuous(limits = c(0, 1.02), breaks = seq(0, 1, 0.2)) +
   labs(title = "B   Tests above PP.H4 0.5",
        x = "PP.H4", y = NULL) +
-  theme_ec() +
-  theme(axis.text.y = element_text(size = 7.4))
+  theme_ec(9.6) +
+  theme(axis.text.y = element_text(size = 9.6))
 
 ## ---------------- Fig 1C ----------------
 agg <- aggregate(PP.H3 ~ locus + loc_lab + tis, data = d, FUN = max)
@@ -123,8 +124,9 @@ pC <- ggplot(agg, aes(loc_lab, PP.H3)) +
                           nrow(agg), sum(agg$PP.H3 > 0.8)),
        x = "Locus (chromosome:position, Mb)",
        y = "PP.H3 (two distinct causal variants)") +
-  theme_ec() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7.8))
+  theme_ec(9.6) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 9.6),
+        plot.subtitle = element_text(lineheight = 1.35))
 
 leg <- get_legend(pA + theme(legend.position = "bottom",
                              legend.direction = "horizontal"))
@@ -135,14 +137,14 @@ fig1 <- plot_grid(
   leg,
   ncol = 1, rel_heights = c(1.00, 0.92, 0.10))
 
-ggsave(file.path(OUT, "fig2_coloc.pdf"), fig1, width = 7.2, height = 4.9, device = cairo_pdf)
-ggsave(file.path(OUT, "fig2_coloc.png"), fig1, width = 7.2, height = 4.9, dpi = 600, type = "cairo")
+ggsave(file.path(OUT, "fig2_coloc.pdf"), fig1, width = 7.2, height = 5.7, device = cairo_pdf)
+ggsave(file.path(OUT, "fig2_coloc.png"), fig1, width = 7.2, height = 5.7, dpi = 600, type = "cairo")
 
 ## ---------------- Fig 2 ----------------
-n2 <- read.delim(file.path(ROOT, "results/incremental_null_v2.tsv"))
-n1 <- read.delim(file.path(ROOT, "results/incremental_null.tsv"))
-r2 <- read.delim(file.path(ROOT, "results/incremental_result_v2.tsv"))
-r1 <- read.delim(file.path(ROOT, "results/incremental_result.tsv"))
+n2 <- read.delim(file.path(ROOT, "results/script_inputs/incremental_null_v2.tsv"))
+n1 <- read.delim(file.path(ROOT, "results/script_inputs/incremental_null.tsv"))
+r2 <- read.delim(file.path(ROOT, "results/script_inputs/incremental_result_v2.tsv"))
+r1 <- read.delim(file.path(ROOT, "results/script_inputs/incremental_result.tsv"))
 
 nd <- rbind(
   data.frame(delta = n2$delta_auc, defn = "Obesity-associated programme"),
@@ -177,7 +179,7 @@ ggsave(file.path(OUT, "fig3_incremental.pdf"), p2, width = 5.6, height = 2.9, de
 ggsave(file.path(OUT, "fig3_incremental.png"), p2, width = 5.6, height = 2.9, dpi = 600, type = "cairo")
 
 ## ---------------- Fig 3 ----------------
-cc <- read.delim(file.path(ROOT, "results/concordance_v2.tsv"))
+cc <- read.delim(file.path(ROOT, "results/script_inputs/concordance_v2.tsv"))
 lvl <- c("GSE13070 muscle, clamp-defined IR vs IS",
          "GSE18732 muscle, type 2 diabetes vs NGT",
          "GSE15773 adipose, IR vs IS")

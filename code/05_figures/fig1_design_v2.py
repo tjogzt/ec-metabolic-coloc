@@ -44,10 +44,10 @@ BANDS = [
      ["FDR<0.05, |logFC|$\\geq$0.3, endometrial expression gate; 608 up / 254 down",
       "preregistered, hashed, and carried unchanged into Layers 3 and 4"],
      "genes in programme", "Discovery\ncontrast"),
-    (45, 13, "2 / 259", "Layer 2  Colocalisation", SHA, TINT["sha"],
-     ["Gene-locus tests across 10 loci and five tissues; PP.H4$>$0.8 threshold",
-      "35 of 50 locus-tissue cells testable, adipose contributing one locus"],
-     "both at 17q21.32", "Risk GWAS\n+ cis-eQTL"),
+    (45, 13, "3 / 503", "Layer 2  Colocalisation", SHA, TINT["sha"],
+     ["Gene-locus tests across 19 loci and five tissues; PP.H4$>$0.8 threshold",
+      "73 of 95 locus-tissue cells testable; one signal survives a change of dataset"],
+     "two at 17q21.32", "Risk GWAS\n+ cis-eQTL"),
     (30, 13, "$+$0.31", "Layer 3  Bulk proxy validity", DIAN, TINT["dian"],
      ["Rank correlation with three independent cohorts",
       "adipose strong, diabetes intermediate, clamp near zero"],
@@ -103,16 +103,16 @@ for x, v, lab, c, nm in PTS:
 # ---------- 底部终端 ----------
 ax.add_patch(Rectangle((0.8, 1.5), 61.5, 11.5, facecolor=TINT["sha"], edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((0.8, 1.5), 1.6, 11.5, facecolor=SHA, edgecolor="none", zorder=2))
-ax.text(4.5, 11.5, "Finding", ha="left", va="center", fontsize=9.5,
+ax.text(4.5, 12.1, "Finding", ha="left", va="center", fontsize=9.5,
         fontweight="bold", color=INK, zorder=3)
-ax.text(4.5, 5.6, "One shared causal variant at 17q21.32, colocalised in liver (SKAP1,\n"
-                  "PP.H4 = 0.92) and muscle (PP.H4 = 0.87); the other nine loci are\n"
-                  "compatible with distinct causal variants",
+ax.text(4.5, 5.4, "One shared causal signal at 17q21.32, in liver (SKAP1, PP.H4 = 0.93)\n"
+                  "and muscle (0.90); the 57-variant credible set identifies a signal,\n"
+                  "not a variant; a third signal at 15q15.2 did not survive",
         ha="left", va="center", fontsize=8, color="#333333", linespacing=1.55, zorder=3)
 
 ax.add_patch(Rectangle((64.5, 1.5), 34.7, 11.5, facecolor="#F7F7F7", edgecolor="none", zorder=0))
 ax.add_patch(Rectangle((64.5, 1.5), 1.6, 11.5, facecolor=GREY, edgecolor="none", zorder=2))
-ax.text(68.2, 11.5, "Boundary", ha="left", va="center", fontsize=9.5,
+ax.text(68.2, 12.1, "Boundary", ha="left", va="center", fontsize=9.5,
         fontweight="bold", color=INK, zorder=3)
 ax.text(68.2, 5.6, "Uterine eQTL is myometrium, not epithelium;\n"
                    "clamp cohort 51 vs 18 limits precision",
