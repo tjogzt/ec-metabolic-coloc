@@ -24,7 +24,7 @@ Inputs
 <PATHS.cache>/expr.npz, <PATHS.cache>/meta.tsv   written by 02
 results/tables/program_symbols.tsv               written by 01
 config.PARAMS.n_random_partitions                null-module count
-config.PARAMS.min_samples_per_cancer             minimum n for a cancer type
+config.PARAMS.min_samples_tumour / _normal      minimum n per block
 config.PARAMS.alpha                              significance level used when
                                                  tallying empirical p-values
 config.MODULES                                   fixed proliferation / adipose genes
@@ -66,7 +66,9 @@ Notes
 * Gene symbols are the match key throughout. The matrix is symbol-keyed; an
   Entrez-based join returns an empty set, which is how an earlier version of
   this stage silently produced no results.
-* ``min_samples_per_cancer`` is applied to the tumour and the normal block
+* ``min_samples_tumour`` (50) gates the tumour block and the null loop;
+  ``min_samples_normal`` (20) gates the solid-tissue-normal block. The two
+  thresholds differ, as they did in the original analysis.
   alike. The pre-port analysis used 50 tumours and 20 normals; the single
   configured floor replaces both, which is the only intended numerical
   difference from the source script.
@@ -278,7 +280,10 @@ def main() -> None:
         if not p.exists():
             raise SystemExit(f"missing input: {p}\nrun 01 and 02 first")
 
-    min_samples = PARAMS.min_samples_per_cancer
+    # Tumour and normal blocks were filtered at different sizes in the
+    # original analysis; keeping them separate preserves the published set.
+    min_tumour = PARAMS.min_samples_tumour
+    min_normal = PARAMS.min_samples_normal
     n_null = PARAMS.n_random_partitions
     alpha = PARAMS.alpha
 
@@ -328,12 +333,12 @@ def main() -> None:
 
     # ---- main scan and normal-tissue control -----------------------------
     print("\n=== Main analysis: primary tumours ===", flush=True)
-    res_t = run_set("tumor", min_samples,
+    res_t = run_set("tumor", min_tumour,
                     meta[meta.sample_type == "Primary Tumor"], X, gene_idx, col_of,
                     rng, up, down, prolif, adipo)
 
     print("\n=== Control: TCGA solid tissue normals ===", flush=True)
-    res_n = run_set("normal", min_samples,
+    res_n = run_set("normal", min_normal,
                     meta[meta.sample_type == "Solid Tissue Normal"], X, gene_idx, col_of,
                     rng, up, down, prolif, adipo)
 
@@ -348,7 +353,7 @@ def main() -> None:
 
     for ct, grp in meta[meta.sample_type == "Primary Tumor"].groupby("cancer_type"):
         cols = [col_of[s] for s in grp.index if s in col_of]
-        if len(cols) < min_samples:
+        if len(cols) < min_tumour:
             continue
         # Z-scored once and reused by every random module below: this is what
         # keeps the null loop at O(n) instead of O(n x n_null).

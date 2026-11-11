@@ -152,7 +152,8 @@ class Params:
 
     # ---- stage 6: cross-cancer ----------------------------------------
     n_random_partitions: int = 100       # ECIR_N_RANDOM_PARTITIONS
-    min_samples_per_cancer: int = 25     # ECIR_MIN_SAMPLES_CANCER
+    min_samples_tumour: int = 50         # ECIR_MIN_SAMPLES_TUMOUR
+    min_samples_normal: int = 20         # ECIR_MIN_SAMPLES_NORMAL
 
 
 def _params() -> Params:
@@ -188,7 +189,8 @@ def _params() -> Params:
         mr_palindromic_hi=float(os.environ.get("ECIR_MR_PAL_HI", d.mr_palindromic_hi)),
         mr_max_snps=int(os.environ.get("ECIR_MR_MAX_SNPS", d.mr_max_snps)),
         n_random_partitions=int(os.environ.get("ECIR_N_RANDOM_PARTITIONS", d.n_random_partitions)),
-        min_samples_per_cancer=int(os.environ.get("ECIR_MIN_SAMPLES_CANCER", d.min_samples_per_cancer)),
+        min_samples_tumour=int(os.environ.get("ECIR_MIN_SAMPLES_TUMOUR", d.min_samples_tumour)),
+        min_samples_normal=int(os.environ.get("ECIR_MIN_SAMPLES_NORMAL", d.min_samples_normal)),
     )
 
 
@@ -206,6 +208,9 @@ GWAS_SECONDARY_FILE = os.environ.get("ECIR_GWAS_SECONDARY", "GCST006465_GRCh37.t
 # Outcome deliberately excluded: no genome-wide significant variant in FinnGen R12.
 GWAS_FINNGEN_FILE = os.environ.get("ECIR_GWAS_FINNGEN",
                                    "finngen_R12_C3_CORPUS_UTERI_EXALLC.gz")
+# Exposures for the Mendelian randomisation stage (both GRCh37).
+GWAS_FASTING_INSULIN_FILE = os.environ.get("ECIR_GWAS_FI", "GCST90002238.tsv.gz")
+GWAS_BMI_FILE = os.environ.get("ECIR_GWAS_BMI", "GCST006900_bmi.txt.gz")
 # eQTL Catalogue summary statistics are fetched over HTTP, never bundled.
 EQTL_CATALOGUE_BASE = os.environ.get(
     "ECIR_EQTL_BASE",
@@ -274,8 +279,8 @@ MODULES: Dict[str, List[str]] = {
     ],
     # Eight adipocyte / lipid-handling markers, fixed a priori (stage 06).
     "adipose": [
-        "ADIPOQ", "PLIN1", "LEP", "FABP4",
-        "LIPE", "CIDEC", "PPARG", "UCP1",
+        "ADIPOQ", "LEP", "PLIN1", "FABP4",
+        "LIPE", "CIDEC", "PPARG", "CEBPA",
     ],
 }
 

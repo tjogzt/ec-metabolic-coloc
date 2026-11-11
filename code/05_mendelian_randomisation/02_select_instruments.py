@@ -96,13 +96,15 @@ from config.config import (  # noqa: E402  (import after sys.path edit)
     PARAMS,
     SEED,
     CHAIN_HG19_TO_HG38,
+    GWAS_FASTING_INSULIN_FILE,
+    GWAS_BMI_FILE,
 )
 
-# Exposure summary statistics. Declared here because config.py, which owns every
-# path and accession, does not yet carry the two exposure accessions; the file
+# Exposure summary statistics, resolved from config like every other input.
 # names are resolved against config.PATHS.data and are never absolute.
-FI_EXPOSURE_FILE = "GCST90002238.tsv.gz"
-BMI_EXPOSURE_FILE = "GCST006900_bmi.txt.gz"
+# Exposure file names come from config so that a re-release is a one-line edit.
+FI_EXPOSURE_FILE = GWAS_FASTING_INSULIN_FILE
+BMI_EXPOSURE_FILE = GWAS_BMI_FILE
 
 # Output table names, unchanged from the source analysis so that downstream
 # stages and shipped results keep referring to the same files.

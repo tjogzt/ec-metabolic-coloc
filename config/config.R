@@ -74,7 +74,8 @@ PARAMS <- list(
 
   # stage 6: cross-cancer
   n_random_partitions  = as.integer(Sys.getenv("ECIR_N_RANDOM_PARTITIONS", "100")),
-  min_samples_per_cancer = as.integer(Sys.getenv("ECIR_MIN_SAMPLES_CANCER", "25"))
+  min_samples_tumour   = as.integer(Sys.getenv("ECIR_MIN_SAMPLES_TUMOUR", "50")),
+  min_samples_normal   = as.integer(Sys.getenv("ECIR_MIN_SAMPLES_NORMAL", "20"))
 )
 
 # ---------------------------------------------------- external resources ----
@@ -116,8 +117,8 @@ COHORTS <- data.frame(
 MODULES <- list(
   proliferation = c("MKI67", "PCNA", "TOP2A", "CCNB1", "CDK1",
                     "BUB1", "AURKA", "PLK1", "CENPE", "RRM2"),
-  adipose       = c("ADIPOQ", "PLIN1", "LEP", "FABP4",
-                    "LIPE", "CIDEC", "PPARG", "UCP1")
+  adipose       = c("ADIPOQ", "LEP", "PLIN1", "FABP4",
+                    "LIPE", "CIDEC", "PPARG", "CEBPA")
 )
 
 # ------------------------------------------------------------- palette ----

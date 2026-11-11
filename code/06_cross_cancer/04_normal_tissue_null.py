@@ -23,7 +23,7 @@ Inputs
 <PATHS.cache>/expr.npz, <PATHS.cache>/meta.tsv   written by 02
 results/tables/program_symbols.tsv               written by 01
 config.PARAMS.n_random_partitions                null-module count
-config.PARAMS.min_samples_per_cancer             minimum group size
+config.PARAMS.min_samples_normal                minimum group size
 config.PARAMS.alpha                              significance level for the tally
 config.MODULES                                   fixed proliferation genes
 
@@ -132,7 +132,7 @@ def main() -> None:
     t0 = time.time()
     rng = np.random.default_rng(SEED)
 
-    min_samples = PARAMS.min_samples_per_cancer
+    min_samples = PARAMS.min_samples_normal
     n_null = PARAMS.n_random_partitions
     alpha = PARAMS.alpha
 
