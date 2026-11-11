@@ -88,11 +88,7 @@ GREY = "0.62"
 
 MR_RESULTS = "mr_results.tsv"
 LOO_FI = "loo_fi.tsv"
-
-# Full-sample IVW estimate of the 22-variant leave-one-out subset, as an odds
-# ratio (exp(0.4073) = 1.5024). Held as a constant because no table in this
-# stage stores the subset's full-sample fit.
-LOO_FULL_OR = 1.5024
+HARMONISED = "harmonised.tsv"
 
 Z_95 = 1.96
 
@@ -198,19 +194,21 @@ def forest_plot(results: pd.DataFrame) -> None:
     ax.set_yticks(ys)
     ax.set_yticklabels([row[0] for row in rows], fontsize=8)
     ax.set_xlabel("Odds ratio for endometrial cancer (95% CI)", fontsize=9)
-    ax.set_ylim(-0.7, len(rows) - 0.3)
+    ax.set_ylim(-0.7, len(rows) + 0.15)
     ax.text(7.6, len(rows) - 0.55, "OR (95% CI)", fontsize=8, ha="left",
             color="0.20", weight="bold")
     ax.spines[["top", "right"]].set_visible(False)
 
-    # Shaded band with the reason the multivariable rows cannot be read. The
-    # band coordinates and the annotation position are carried over unchanged
-    # from the source figure so that this panel overlays the published one; what
-    # marks an excluded estimate is its dotted interval and grey symbol, not the
-    # band. The threshold in the label is taken from the config value that
-    # produced the verdict.
-    ax.axhspan(-0.75, 1.4, color=GREY, alpha=0.09, zorder=0)
-    ax.text(0.52, 1.55,
+    # Shaded band with the reason the multivariable rows cannot be read. It must
+    # sit over the two MVMR rows, which are the first two entries and therefore
+    # land at the TOP of the axis (ys counts down). The earlier version spanned
+    # -0.75..1.4, which covers the two bottom rows, so the band appeared to
+    # exclude the fasting-insulin estimates. The threshold in the label is taken
+    # from the config value that produced the verdict.
+    n_mvmr = sum(1 for r in rows if r[4])          # rows flagged as invalid
+    top, bottom = len(rows) - 1, len(rows) - n_mvmr
+    ax.axhspan(bottom - 0.45, top + 0.45, color=GREY, alpha=0.09, zorder=0)
+    ax.text(0.52, top + 0.55,
             f"Multivariable MR excluded: conditional F < {PARAMS.mr_min_f:g}",
             fontsize=8, color="0.40", va="bottom")
 
@@ -223,7 +221,46 @@ def forest_plot(results: pd.DataFrame) -> None:
 # --------------------------------------------------------------------------
 # Figure S2: leave-one-out
 # --------------------------------------------------------------------------
-def leave_one_out_plot(loo: pd.DataFrame) -> None:
+def full_sample_subset_estimate(harmonised: pd.DataFrame,
+                                loo: pd.DataFrame) -> float:
+    """Inverse-variance weighted log-OR over the variants the LOO panel tests.
+
+    Parameters
+    ----------
+    harmonised : DataFrame
+        harmonised.tsv, with rsid and the per-variant effects and standard
+        errors for fasting insulin (fi_beta, fi_se) and the outcome
+        (ec_beta, ec_se).
+    loo : DataFrame
+        loo_fi.tsv; its dropped_rsid column defines the subset.
+
+    Returns
+    -------
+    The log-OR of the fixed-effect inverse-variance weighted estimate over the
+    whole subset, i.e. the value each leave-one-out replicate is compared with.
+
+    Notes
+    -----
+    This replaces a literal that was carried over from the exploratory run. The
+    literal could not be reproduced from any shipped table (the fixed- and
+    random-effect forms both give 1.5017 against the recorded 1.5024), so the
+    value is now derived from the data every time the panel is drawn. The
+    difference is 0.05% in OR and does not move the reference line visibly.
+
+    Weights follow the two-sample ratio estimator, w = (b_exposure / se_outcome)^2.
+    """
+    subset = harmonised[harmonised["rsid"].isin(set(loo["dropped_rsid"]))]
+    subset = subset.dropna(subset=["fi_beta", "fi_se", "ec_beta", "ec_se"])
+    if subset.empty:
+        raise SystemExit("no variants shared between harmonised.tsv and loo_fi.tsv")
+    bx = subset["fi_beta"].to_numpy(float)
+    by = subset["ec_beta"].to_numpy(float)
+    sy = subset["ec_se"].to_numpy(float)
+    w = (bx / sy) ** 2
+    return float((w * (by / bx)).sum() / w.sum())
+
+
+def leave_one_out_plot(loo: pd.DataFrame, full_beta: float) -> None:
     """Draw the leave-one-out plot for the fasting insulin IVW estimate.
 
     Parameters
@@ -240,7 +277,6 @@ def leave_one_out_plot(loo: pd.DataFrame) -> None:
     matters for stability.
     """
     loo = loo.sort_values("beta")
-    full_beta = float(np.log(LOO_FULL_OR))
 
     fig, ax = plt.subplots(figsize=(5.0, 6.4))
     y = np.arange(len(loo))
@@ -287,7 +323,8 @@ def main() -> None:
     forest_plot(results)
 
     loo = pd.read_csv(PATHS.tables / LOO_FI, sep="\t")
-    leave_one_out_plot(loo)
+    harmonised = pd.read_csv(PATHS.tables / HARMONISED, sep="\t")
+    leave_one_out_plot(loo, full_sample_subset_estimate(harmonised, loo))
 
     print("wrote:")
     for path in sorted(PATHS.figures.glob("figureS*")):
