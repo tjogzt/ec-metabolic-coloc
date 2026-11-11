@@ -4,17 +4,38 @@
 *.out
 *.toc
 *.synctex.gz
+*.fls
+*.fdb_latexmk
+*.xdv
 
 # Python / R
 __pycache__/
-*.pyc
+*.py[cod]
 .RData
 .Rhistory
+.Rproj.user/
 
-# macOS
+# macOS / Windows
 .DS_Store
 ._*
+Thumbs.db
 
-# Data: never commit raw inputs (see data/README.md)
+# Data: raw inputs are never committed, only the download recipe
 data/*
 !data/README.md
+
+# Intermediate artefacts rebuilt by the pipeline
+.cache/
+_tmp_*
+*.tbi
+*.csi
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Keep the published tables and figures under version control
+!results/tables/*.tsv
+!results/figures/*.pdf
+!results/figures/*.png
