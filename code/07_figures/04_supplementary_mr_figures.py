@@ -296,16 +296,16 @@ def leave_one_out_plot(loo: pd.DataFrame, full_beta: float) -> None:
     ax.axvline(0, color="0.33", lw=0.8, ls=":")
 
     ax.set_yticks(y)
-    ax.set_yticklabels([str(x) for x in loo.dropped_rsid], fontsize=8)
-    ax.set_ylabel("Variant omitted", fontsize=9)
-    ax.set_xlabel("log OR for endometrial cancer (95% CI)", fontsize=9)
+    ax.set_yticklabels([str(x) for x in loo.dropped_rsid], fontsize=9)
+    ax.set_ylabel("Variant omitted", fontsize=10)
+    ax.set_xlabel("log OR for endometrial cancer (95% CI)", fontsize=10)
     ax.set_ylim(-0.8, len(loo) - 0.2)
     ax.spines[["top", "right"]].set_visible(False)
-    ax.text(full_beta + 0.03, len(loo) - 1.0, "all variants", fontsize=8,
+    ax.text(full_beta + 0.03, len(loo) - 1.0, "all variants", fontsize=9,
             color=ZHU, rotation=90, va="top")
     ax.text(0.02, 0.02,
             f"Open symbols: p \u2265 {PARAMS.alpha:g} after omission",
-            transform=ax.transAxes, fontsize=8, color="0.40")
+            transform=ax.transAxes, fontsize=9, color="0.40")
 
     fig.tight_layout()
     fig.savefig(PATHS.figures / "figureS2_leave_one_out.pdf")
