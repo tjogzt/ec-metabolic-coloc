@@ -33,8 +33,9 @@
 # Notes
 # -----
 # * Figure style is frozen: Arial, no type below FIGURE_MIN_PT, near-square
-#   canvases, no in-panel A/B/C letters (panel letters live in the titles so
-#   that each panel reads as a standalone box in the two-column layout).
+#   canvases, panel letters in uppercase type: figure 2 carries A/B/C in the
+#   panel titles, figure 4 carries A/B in the facet strips, consistent with
+#   the journal requirement for composite figures.
 # * Colours are semantic, never ordinal: they are read from PALETTE in
 #   config/config.R and re-labelled to tissues. Nothing here redefines a hex
 #   value, so a change of palette propagates to every figure at once.
@@ -268,6 +269,13 @@ n_null <- sum(nd$defn == levels(nd$defn)[1])
 n_case <- obs$n[1]
 n_event <- obs$events[1]
 
+# Journal requirement: denote individual panels of a composite figure with
+# uppercase letters. These two facets are two panels, so each strip carries
+# its letter rather than relying on a separate legend box.
+defn_lab <- stats::setNames(
+  paste0(LETTERS[seq_along(levels(obs$defn))], "   ", levels(obs$defn)),
+  levels(obs$defn))
+
 p2 <- ggplot(nd, aes(delta)) +
   geom_histogram(bins = 22, fill = "grey80", colour = "white", linewidth = 0.25) +
   geom_vline(xintercept = 0, colour = "grey55", linewidth = 0.35) +
@@ -276,7 +284,8 @@ p2 <- ggplot(nd, aes(delta)) +
   geom_text(data = obs, aes(x = delta, y = Inf, label = lab),
             hjust = -0.06, vjust = 1.5, size = FIGURE_MIN_PT / .pt,
             colour = PALETTE[["uterus"]], lineheight = 0.95) +
-  facet_wrap(~ defn, nrow = 1, scales = "free_y") +
+  facet_wrap(~ defn, nrow = 1, scales = "free_y",
+             labeller = labeller(defn = defn_lab)) +
   scale_x_continuous(labels = function(x) sprintf("%.3f", x)) +
   scale_y_continuous(expand = expansion(mult = c(0.02, 0.30))) +
   labs(title = "Incremental value of the programme for predicting metastasis",
