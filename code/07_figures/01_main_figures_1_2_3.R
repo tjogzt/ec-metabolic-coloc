@@ -341,11 +341,11 @@ p3 <- ggplot(long, aes(grp, val, colour = grp, shape = set, group = set)) +
            size = FIGURE_MIN_PT / .pt, colour = GREY, hjust = 1) +
   scale_colour_manual(values = series_col, guide = "none") +
   scale_shape_manual(values = c(16, 1), name = NULL) +
-  scale_y_continuous(limits = c(38, 90), breaks = seq(40, 90, 10),
+  scale_y_continuous(limits = c(38, 96), breaks = seq(40, 90, 10),
                      labels = function(x) paste0(x, "%")) +
   labs(title = "Concordance of programme scores with three independent cohorts",
        subtitle = "Sign agreement (95% CI); filled = all genes, open = responsive subset",
-       x = NULL, y = "Direction agreement") +
+       x = NULL, y = "Sign agreement") +
   theme_ec() +
   theme(legend.position = "top",
         legend.margin = margin(0, 0, -4, 0),

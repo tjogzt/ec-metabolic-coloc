@@ -187,7 +187,7 @@ ax.text(4.5, 12.1, "Finding", ha="left", va="center", fontsize=pt(9.5),
         fontweight="bold", color=INK, zorder=3)
 ax.text(4.5, 5.4, "One shared causal signal at 17q21.32, in liver (SKAP1, PP.H4 = 0.93)\n"
                   "and muscle (0.90); the 57-variant credible set identifies a signal,\n"
-                  "not a variant; a third signal at 15q15.2 did not survive",
+                  "not a variant; a third signal at 15q15.1 did not survive",
         ha="left", va="center", fontsize=pt(8), color=BODY, linespacing=1.55, zorder=3)
 
 ax.add_patch(Rectangle((64.5, 1.5), 34.7, 11.5, facecolor=PANEL,
