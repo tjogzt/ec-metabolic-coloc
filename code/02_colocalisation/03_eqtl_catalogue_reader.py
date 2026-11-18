@@ -19,7 +19,6 @@ without a tabix index; on those, ``tabix`` returns an empty result and exits
 successfully, which would silently produce zero colocalisation tests instead of
 an error.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -46,10 +45,11 @@ from __future__ import annotations
 import gzip
 import pathlib
 import subprocess
+import time
+import urllib.request
 from bisect import bisect_right
 from typing import Dict, List, Optional, Sequence, Tuple, Union
 
-import numpy as np
 import pandas as pd
 
 # Columns retained from the upstream file, in output order.
@@ -63,7 +63,12 @@ NUMERIC = ["position", "maf", "pvalue", "beta", "se", "median_tpm"]
 def read_header(path: "str | pathlib.Path") -> List[str]:
     """Return the column names of an eQTL Catalogue summary file."""
     with gzip.open(path, "rt") as fh:
-        return fh.readline().rstrip("\n").split("\t")
+        return fh.readline().rstrip("\r\n").split("\t")
+
+
+def positions_from_header(header: List[str]) -> List[int]:
+    """Map :data:`WANTED` onto an already-read header."""
+    return [header.index(name) for name in WANTED]
 
 
 def column_positions(path) -> List[int]:
@@ -83,8 +88,29 @@ def column_positions(path) -> List[int]:
         If a required column is missing, so that the failure happens at read
         time rather than producing a silently truncated table.
     """
-    header = read_header(path)
-    return [header.index(name) for name in WANTED]
+    return positions_from_header(read_header(path))
+
+
+def remote_header(url: str, timeout: float = 60.0) -> List[str]:
+    """Read the header line of a remote bgzip-compressed summary table.
+
+    The remote column order need not match :data:`OUT_COLS`; resolving the
+    indices from the header keeps ``beta`` and ``se`` aligned when a local copy
+    is absent and ``--remote`` is used. A dropped TLS connection is retried
+    three times before it is raised.
+    """
+    last_error: object = None
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(url, timeout=timeout) as response:
+                with gzip.GzipFile(fileobj=response) as stream:
+                    return (stream.readline().decode("utf-8")
+                            .rstrip("\r\n").split("\t"))
+        except (OSError, EOFError) as exc:
+            last_error = exc
+            time.sleep(2 ** attempt)
+    raise RuntimeError(
+        f"could not read remote header from {url} after 3 attempts: {last_error}")
 
 
 def _to_frame(rows: List[List[str]], want: Sequence[int]) -> pd.DataFrame:
@@ -116,15 +142,26 @@ def qtl_region(chrom: str, start: int, end: int,
 
     Notes
     -----
-    A non-zero tabix exit status and an empty result are treated identically:
-    both yield an empty frame. The streaming alternative is the correct path
-    when a file lacks an index.
+    A failed tabix call is retried three times and then raised, so a transient
+    network error cannot be mistaken for a window with no variants. An empty
+    result from a successful call is still returned as an empty frame. The
+    streaming alternative is the correct path when a file lacks an index.
     """
     if want is None:
         want = column_positions(src)
-    proc = subprocess.run(["tabix", str(src), f"{chrom}:{start}-{end}"],
-                          capture_output=True, text=True)
-    if proc.returncode != 0 or not proc.stdout.strip():
+    last_error = ""
+    for attempt in range(3):
+        proc = subprocess.run(["tabix", str(src), f"{chrom}:{start}-{end}"],
+                              capture_output=True, text=True)
+        if proc.returncode == 0:
+            break
+        last_error = proc.stderr.strip() or f"exit {proc.returncode}"
+        time.sleep(2 ** attempt)
+    else:
+        raise RuntimeError(
+            f"tabix failed for {src} {chrom}:{start}-{end} after 3 attempts: "
+            f"{last_error}")
+    if not proc.stdout.strip():
         return pd.DataFrame(columns=OUT_COLS)
     rows = [line.split("\t") for line in proc.stdout.strip().split("\n")]
     return _to_frame(rows, want)

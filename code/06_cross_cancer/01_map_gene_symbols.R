@@ -14,7 +14,6 @@
 # produced an empty intersection downstream. The mapping is therefore done
 # symbol-to-symbol here, and the Entrez dependency is gone.
 #
-# Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 # Created  : 2026-11-11
 # Version  : 2.0.0
 #
@@ -79,6 +78,22 @@ if (nzchar(.env_root)) {
 }
 
 source(file.path(.root, "config", "config.R"))
+
+# ---- Entrez-to-symbol map for the current Xena matrix ---------------------
+# The retrieved Xena matrix is keyed by Entrez id, while the programme is keyed
+# by symbol. Build the map once from org.Hs.eg.db; stage 02 applies it when the
+# matrix is read. Keeping the map as a file makes the conversion inspectable
+# and independent of the R session that produced it.
+map_file <- file.path(DATA, "ENTREZ2SYMBOL.tsv")
+if (!file.exists(map_file)) {
+  suppressPackageStartupMessages(library(org.Hs.eg.db))
+  map <- AnnotationDbi::select(org.Hs.eg.db,
+                               keys = keys(org.Hs.eg.db, keytype = "ENTREZID"),
+                               columns = "SYMBOL", keytype = "ENTREZID")
+  map <- map[!is.na(map$SYMBOL) & nzchar(map$SYMBOL), ]
+  write.table(map, map_file, sep = "\t", quote = FALSE, row.names = FALSE)
+  cat(sprintf("wrote %s (%d Entrez-to-symbol rows)\n", map_file, nrow(map)))
+}
 
 # ---- load the frozen programme --------------------------------------------
 prog_file <- file.path(TABLES, "metabolic_program_v2.tsv")
@@ -168,8 +183,13 @@ if (file.exists(expr_file)) {
   cat(sprintf("Matrix: %d columns in the header; first row identifier '%s'\n",
               length(header) - 1L, first[1]))
   if (grepl("^[0-9]+$", first[1])) {
-    stop(sprintf("matrix is keyed by numeric ids ('%s'), but this package matches on symbols",
-                 first[1]))
+    if (file.exists(map_file)) {
+      cat("Matrix is Entrez-keyed; stage 02 maps ENTREZID -> SYMBOL ",
+          "with ENTREZ2SYMBOL.tsv\n", sep = "")
+    } else {
+      stop(sprintf("matrix is keyed by numeric ids ('%s'), and no Entrez-to-symbol map is present",
+                   first[1]))
+    }
   }
 } else {
   message("expression matrix not present locally; skipping the identifier check")

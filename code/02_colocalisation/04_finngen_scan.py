@@ -17,7 +17,6 @@ The statistic produced here is computed from the released file by this package.
 It is not a value reported in the FinnGen resource paper, and is never cited as
 one.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

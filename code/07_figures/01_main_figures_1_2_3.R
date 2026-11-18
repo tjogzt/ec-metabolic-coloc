@@ -10,7 +10,6 @@
 #   fig4_concordance.pdf    sign concordance with three independent cohorts
 # A cairo PDF plus a 600 dpi PNG preview is written for each figure.
 #
-# Author  : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 # Created : 2026-11-11
 # Version : 2.0.0 (replication package restructure)
 #
@@ -35,7 +34,7 @@
 # * Figure style is frozen: Arial, no type below FIGURE_MIN_PT, near-square
 #   canvases, panel letters in uppercase type: figure 2 carries A/B/C in the
 #   panel titles, figure 4 carries A/B in the facet strips, consistent with
-#   the journal requirement for composite figures.
+#   the composite-figure layout requirement.
 # * Colours are semantic, never ordinal: they are read from PALETTE in
 #   config/config.R and re-labelled to tissues. Nothing here redefines a hex
 #   value, so a change of palette propagates to every figure at once.

@@ -15,7 +15,6 @@ correlates with a fixed proliferation module, and the same correlation survives
 a null built from random modules that are matched to the programme in size and
 in expression level.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

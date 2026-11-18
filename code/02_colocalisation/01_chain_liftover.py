@@ -13,7 +13,6 @@ Only whole-block lookups are implemented, which is sufficient for SNVs. Indels
 that straddle a block boundary are not handled; callers must have filtered to
 single-base substitutions before lifting.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

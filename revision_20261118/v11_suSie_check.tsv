@@ -1,0 +1,14 @@
+tissue	gene	n_cs	cs_ids	top
+Liver	SKAP1	2	1|2	48153476:pip=0.230,afc=0.236; 48206432:pip=0.175,afc=-0.329
+Muscle_Skeletal	SKAP1	0		
+Adipose_Subcutaneous	SKAP1	0		
+Adipose_Visceral_Omentum	SKAP1	0		
+Uterus	SKAP1	0		
+Pancreas	SKAP1	0		
+Spleen	SKAP1	1	1	48339953:pip=0.026,afc=-0.166; 48263229:pip=0.025,afc=nan
+Breast_Mammary_Tissue	SKAP1	0		
+Ovary	SKAP1	0		
+Vagina	SKAP1	1	1	49113727:pip=0.990,afc=3.251
+Whole_Blood	SKAP1	0		
+Thyroid	SKAP1	1	1	48258047:pip=0.040,afc=1.433; 48251610:pip=0.021,afc=nan
+Kidney_Cortex	SKAP1	0		

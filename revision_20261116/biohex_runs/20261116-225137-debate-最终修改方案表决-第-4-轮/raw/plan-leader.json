@@ -1,0 +1,54 @@
+{
+  "id": "gen-1794840698-dn5gTmkD0oW0dikUzjgI",
+  "object": "chat.completion",
+  "created": 1794840698,
+  "model": "deepseek/deepseek-v4-pro",
+  "provider": "Relace",
+  "system_fingerprint": null,
+  "service_tier": null,
+  "choices": [
+    {
+      "index": 0,
+      "logprobs": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "{\n  \"mode\": \"debate\",\n  \"reason\": \"用户显式指定debate模式，且方案涉及统计裁决、文本一致性、审计协议等多学科交叉争议，需多轮质证收敛。\",\n  \"rounds\": 3,\n  \"focus\": [\n    \"裁决1与裁决2的隔离措施是否充分且不引入新风险\",\n    \"P0卫生修复中黄金对照失败即停的触发条件与回滚策略\",\n    \"README措辞修改的可验证性及与config.SEED的一致性\",\n    \"核对协议中skeleton_ebiomedicine.tex不一致的处理边界\",\n    \"P1去重抽取的三重门槛是否可操作且不改变数值结果\",\n    \"P2重跑台账阶段划分与缺失文件处理是否完备\"\n  ],\n  \"groups\": [\n    [\"cn-deepseek\", \"cn-glm\", \"cn-kimi\", \"intl-mistral\", \"intl-xai\", \"intl-nvidia\"]\n  ],\n  \"producer\": null\n}",
+        "refusal": null,
+        "reasoning": "我们被要求只输出一个JSON对象，不要Markdown代码围栏，不要解释。任务是为这个任务选择最合适的协作模式，并给出分工。用户显式指定了debate模式。所以mode必须是debate。我们需要给出reason、rounds、focus、groups、producer。由于是debate模式，producer应为null。分组必须覆盖所有可用成员且每人只出现一次。可用成员有6个：cn-deepseek, cn-glm, cn-kimi, intl-mistral, intl-xai, intl-nvidia。debate模式通常不需要分组，但输出格式要求groups字段，可能可以设为空数组或每个成员单独一组？但要求“分组必须覆盖所有可用成员且每人只出现一次”，所以可能还是需要分组。在debate模式下，可能所有成员一起辩论，但groups字段可能用于指定辩论的轮次或分组？看说明：groups字段用于groups模式，但这里要求输出groups。可能对于debate，groups可以设为包含所有成员的单个组？或者每个成员一个组？但“分组必须覆盖所有可用成员且每人只出现一次”意味着每个成员必须出现在某个组中，且只能出现一次。对于debate，我们可以将所有成员放在一个组里，表示他们一起辩论。或者分成两个组进行辩论？但debate模式通常不是分组辩论，而是多轮交叉质证。可能groups字段在debate模式下可以忽略，但必须提供。为了安全，我们可以将所有成员放在一个组里。或者按照惯例，debate模式不需要分组，但输出格式要求groups，我们可以给一个空数组？但要求“分组必须覆盖所有可用成员且每人只出现一次”，所以不能为空。那就把所有成员放在一个组里。producer为null。rounds可以设为3。focus列出需要重点核验的点。reason一句话理由。",
+        "reasoning_details": [
+          {
+            "type": "reasoning.text",
+            "text": "我们被要求只输出一个JSON对象，不要Markdown代码围栏，不要解释。任务是为这个任务选择最合适的协作模式，并给出分工。用户显式指定了debate模式。所以mode必须是debate。我们需要给出reason、rounds、focus、groups、producer。由于是debate模式，producer应为null。分组必须覆盖所有可用成员且每人只出现一次。可用成员有6个：cn-deepseek, cn-glm, cn-kimi, intl-mistral, intl-xai, intl-nvidia。debate模式通常不需要分组，但输出格式要求groups字段，可能可以设为空数组或每个成员单独一组？但要求“分组必须覆盖所有可用成员且每人只出现一次”，所以可能还是需要分组。在debate模式下，可能所有成员一起辩论，但groups字段可能用于指定辩论的轮次或分组？看说明：groups字段用于groups模式，但这里要求输出groups。可能对于debate，groups可以设为包含所有成员的单个组？或者每个成员一个组？但“分组必须覆盖所有可用成员且每人只出现一次”意味着每个成员必须出现在某个组中，且只能出现一次。对于debate，我们可以将所有成员放在一个组里，表示他们一起辩论。或者分成两个组进行辩论？但debate模式通常不是分组辩论，而是多轮交叉质证。可能groups字段在debate模式下可以忽略，但必须提供。为了安全，我们可以将所有成员放在一个组里。或者按照惯例，debate模式不需要分组，但输出格式要求groups，我们可以给一个空数组？但要求“分组必须覆盖所有可用成员且每人只出现一次”，所以不能为空。那就把所有成员放在一个组里。producer为null。rounds可以设为3。focus列出需要重点核验的点。reason一句话理由。",
+            "format": "unknown",
+            "index": 0
+          }
+        ]
+      }
+    }
+  ],
+  "usage": {
+    "prompt_tokens": 2742,
+    "completion_tokens": 612,
+    "total_tokens": 3354,
+    "cost": 0.0033858,
+    "is_byok": false,
+    "prompt_tokens_details": {
+      "cached_tokens": 0,
+      "cache_write_tokens": 0,
+      "audio_tokens": 0,
+      "video_tokens": 0
+    },
+    "cost_details": {
+      "upstream_inference_cost": 0.0033858,
+      "upstream_inference_prompt_cost": 0.0024678,
+      "upstream_inference_completions_cost": 0.000918
+    },
+    "completion_tokens_details": {
+      "reasoning_tokens": 594,
+      "image_tokens": 0,
+      "audio_tokens": 0
+    }
+  }
+}

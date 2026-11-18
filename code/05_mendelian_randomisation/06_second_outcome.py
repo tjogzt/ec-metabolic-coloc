@@ -14,7 +14,6 @@ GRCh38, the instruments are lifted back to GRCh37 here and matched on
 coordinates; no rsID join is used, since the secondary file's identifier
 convention differs from the primary one.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

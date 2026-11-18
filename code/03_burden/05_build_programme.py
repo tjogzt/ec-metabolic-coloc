@@ -24,7 +24,6 @@ carry no tumour information, and the endometrial filter uses only the tissue
 expression distribution. That is what allows the later incremental-value test to
 be called independent of the endpoint.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

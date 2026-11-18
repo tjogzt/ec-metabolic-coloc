@@ -22,7 +22,6 @@ implemented here from its published closed form:
 The module is the whole numerical core of the stage; the driver scripts
 (02 to 06) contain no estimator arithmetic of their own.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

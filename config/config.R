@@ -6,7 +6,6 @@
 # R counterpart of config/config.py. Every R script sources this file and must
 # not embed paths, accessions or thresholds of its own.
 #
-# Author  : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 # Created : 2026-11-11
 # Version : 2.0.0 (replication package restructure)
 #

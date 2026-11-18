@@ -25,7 +25,6 @@ say about expression in this window. Keeping them together also keeps the
 variant-id parsing in one place, since both files identify variants as
 ``chr1_12345_A_G_b38``.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

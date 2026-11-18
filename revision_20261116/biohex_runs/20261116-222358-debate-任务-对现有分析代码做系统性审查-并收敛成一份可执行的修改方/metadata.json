@@ -1,0 +1,74 @@
+{
+  "team": "biohex",
+  "display_name": "BioHex 六合 · AI 生物信息学研究团队",
+  "mode": "debate",
+  "started": "2026-11-16T22:23:58",
+  "task_sha256": "d7818dc3121e2cc65d187c74ede08ec85508d771453361fe71a3accfb36d0b98",
+  "task_path": "/Users/taozhu/my researches/gongbing/ec-metabolic-coloc/revision_20261116/_biohex_review_task.md",
+  "context_files": [],
+  "leader": "cn-deepseek",
+  "members": [
+    {
+      "id": "cn-deepseek",
+      "alias": "DeepSeek",
+      "model": "deepseek/deepseek-v4-pro",
+      "vendor": "DeepSeek",
+      "region": "CN",
+      "role": "Leader / 深度推理 / 统计推断",
+      "context": 1048576,
+      "effort": "max"
+    },
+    {
+      "id": "cn-glm",
+      "alias": "GLM",
+      "model": "z-ai/glm-5.3-prime",
+      "vendor": "Z.ai（智谱）",
+      "region": "CN",
+      "role": "方法架构 / 中文综合",
+      "context": 1000000,
+      "effort": "max"
+    },
+    {
+      "id": "cn-kimi",
+      "alias": "Kimi",
+      "model": "moonshotai/kimi-k2.7-code",
+      "vendor": "Moonshot（月之暗面）",
+      "region": "CN",
+      "role": "代码实现 / 工程复现",
+      "context": 262144,
+      "effort": "max"
+    },
+    {
+      "id": "intl-mistral",
+      "alias": "Mistral Large 4",
+      "model": "mistralai/mistral-large-4-0",
+      "vendor": "Mistral AI（法国）",
+      "region": "INTL",
+      "role": "科学推理 / 方法审阅",
+      "context": 1048576,
+      "effort": "max"
+    },
+    {
+      "id": "intl-xai",
+      "alias": "Grok 4.7",
+      "model": "x-ai/grok-4.7",
+      "vendor": "xAI（美国）",
+      "region": "INTL",
+      "role": "红队 / 反方质证",
+      "context": 500000,
+      "effort": "max"
+    },
+    {
+      "id": "intl-nvidia",
+      "alias": "Nemotron 3.5 Super",
+      "model": "nvidia/nemotron-3.5-super-vl",
+      "vendor": "NVIDIA（美国）",
+      "region": "INTL",
+      "role": "数据分析 / 长上下文",
+      "context": 1048576,
+      "effort": "max"
+    }
+  ],
+  "chosen_mode": "debate",
+  "plan_source": "leader"
+}

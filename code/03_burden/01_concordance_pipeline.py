@@ -31,7 +31,6 @@ they recompute the same quantity and must never drift apart:
 
 Both are read-only: they print and write nothing.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

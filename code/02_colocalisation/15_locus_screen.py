@@ -24,7 +24,6 @@ variant-set construction exist once.
                GRCh37, and report direction concordance
     compare    print the summary statistics of two result tables side by side
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -89,10 +88,12 @@ from scipy import stats
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parents[1]))       # repository root, for config/
+sys.path.insert(0, str(HERE.parents[1] / "code"))
 
 from config.config import (PATHS, PARAMS, TISSUES, GWAS_PRIMARY_FILE,
                            GWAS_SECONDARY_FILE, EQTL_CATALOGUE_BASE,
                            CHAIN_HG38_TO_HG19, SEED)
+from common.io_utils import resolve_input, remote_size
 from importlib import import_module
 
 _abf = import_module("05_coloc_abf_engine")
@@ -148,12 +149,6 @@ def resolve_tissue(label: str) -> Tuple[str, str]:
         raise SystemExit(f"unknown tissue {label}; known labels: "
                          f"{sorted(TISSUES)} (aliases: {sorted(ALIASES)})")
     return tissue, qtd
-
-
-def resolve_input(name: str) -> pathlib.Path:
-    """Resolve a user-supplied file name against the data directory."""
-    path = pathlib.Path(name)
-    return path if path.is_absolute() else PATHS.data / path
 
 
 def load_outcome(name: str) -> Dict[str, pd.DataFrame]:
@@ -271,19 +266,6 @@ def coloc_one(df: pd.DataFrame) -> Dict[str, object]:
 # --------------------------------------------------------------------------
 # download
 # --------------------------------------------------------------------------
-def remote_size(url: str) -> int:
-    """Content-Length of a remote file, or 0 when it cannot be read."""
-    proc = subprocess.run(["curl", "-sI", "-m", "60", url],
-                          capture_output=True, text=True)
-    for line in proc.stdout.splitlines():
-        if line.lower().startswith("content-length"):
-            try:
-                return int(line.split(":", 1)[1].strip())
-            except ValueError:
-                return 0
-    return 0
-
-
 def cmd_download(args: argparse.Namespace) -> None:
     """Fetch one dataset and prepare the files the other stages read.
 

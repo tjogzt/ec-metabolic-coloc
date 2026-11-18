@@ -1,0 +1,21 @@
+<<<ANSWER>>>
+[结论] 正式包只允许做“不改统计量的完整性修复”：结果数字必须从表读入、非结果随机路径必须移出正式结果、缺数据必须失败停止；禁止为减文件数合并阶段脚本，禁止本轮改仓库。
+[理由]
+1. 减文件数不是防腐化。腐化来自两套科学逻辑和嵌进代码的结果数字，不来自 `docs/FLOW.md` 的阶段编号。同名函数先当巧合：`_find_member`/`genes_near_loci`、`_logsum`、`resolve_input`/`remote_size` 只有在 diff 与数值等价测试通过后才可抽到共享模块；`zmat`/`build_background`/`draw_module` 是得分与零模型的契约，未证明等价前合并会改 p 值，禁止动。`_parse_args` 禁止合并。阶段脚本 00–07、图脚本与分析脚本、MR 自检与正式 MR，全部不得合并成巨文件。
+2. 随机数裁决：bootstrap/置换/模块抽样（种子来自 `config.SEED` 或 `--seed`）保留在正式路径，这是带种子的推断，不是虚假数据；删除会毁掉已报告的不确定性。`10_positive_control.py` 移出正式结果路径：脚本可留，输出不得进入文稿表，不得扩展、不得用来填缺失数据。`01_mr_estimators.py` 的 `seed=1`、`TRUE=0.30`、`n=400` 是门控自检，移到测试入口，禁止写入 `results/`。`revision_20261116/` 的 `default_rng(20261116)` 移出正式结果路径；未证明它未进入文稿之前，禁止改种子。
+3. `02_figure1_design.py` 的 PTS（0.313/0.202/0.098 与 “+0.31/+0.20/+0.10”）是嵌死的结果，必须经中间变量从 `concordance_by_cohort.tsv` 读入。15.0/16.6 等版式坐标不是科学结果，不得数据化。删除字面量之前，加载器必须复现现有标签字符串；复现失败则停，不得改图。`02_select_instruments.py` 注释中的 “23.28%” 必须删除，不得重算后写回新数字。
+4. README“唯一写死的常数是随机种子、无硬编码 path/accession/threshold”已被 PTS 与非 `config.SEED` 种子证伪。该句必须改；path/accession/threshold 是否还有别的硬编码仍是未核验，不得靠记忆补命中。文稿数字本轮只建立对照协议，不得声称已完成全文核对。
+5. 身份信息：正式包每个脚本头的作者姓名与邮箱，以及 `01_main_figures_1_2_3.R` 中指向期刊要求的句子，必须清除并改为英文文件头（目的、输入、输出、种子来源、不做什么）。方法名、队列 accession、GTEx 等不是身份，不得误删。`06_EC_IR/paper_ms/skeleton_ebiomedicine.tex` 不在本次代码合并/重跑范围，本轮禁止改文件名。
+6. “重跑到能跑通”不得解释为退出码 0。缺原始数据时必须停并报告；禁止新模拟路径。功效模拟已存在，裁决是隔离而非新增，也不是静默删除后用别的模拟顶上。任何会改检验统计量、零模型、种子、重抽样单位或阈值的编辑，都是结果变更，超出本轮卫生修复，须另报用户。
+[风险与不确定]
+- 95% CI −0.014 to +0.031 不在 `incremental_value.tsv` 该行；来源文件未核验。在定位前重跑 `07_incremental_value.py` 或改 bootstrap 种子，可能改已写进 README 的区间。
+- 0.0976 显示为 +0.10（两位）与图中 0.098（三位）是舍入政策冲突，不是已证实的计算错误。未锁定舍入规则就“从表读取”，会改图上数字。
+- 无法确认：两套同名函数是否文本/语义相同；`config.py` 与 `config.R` 的 SEED 是否相等；`10_positive_control.py` 是否覆盖实证表；`revision_20261116` 是否喂给文稿；除已定位项外是否还有硬编码 path/accession/threshold。
+- 单细胞/跨癌的重抽样单位若是 cell 而非 patient/library，p 值可能偏乐观。本轮不得借去重“修正”单位，否则发表数字改变。跨平台 BLAS/库版本可造成种子程序的浮点差；不得为追绿而改代码。
+- 领域共识：缺数据不得用模拟填平。我的推断：PTS 的 y 值是舍入后的 rho 被当作示意图坐标。无法确认的条目不得写成已核对。
+[建议]
+1. P0（用户批准前不得改仓库；批准后先做这些，且不得改变已发表统计量）。`code/07_figures/02_figure1_design.py`：PTS 科学数字改为读 `results/tables/concordance_by_cohort.tsv` 到中间变量再传入作图；标签规则必须复现 “+0.31”“+0.20”“+0.10”；版式坐标不动；黄金对照失败则停。预期：图与表单源；已发表数字不变，仅当对照失败时不得发布。正式包 `code/**` 与 `config/**` 文件头，以及 `07_figures/01_main_figures_1_2_3.R`：删除作者姓名、邮箱和期刊要求措辞，改为英文头注释。预期：无数字变化。`revision_20261116/`：排除在正式结果路径外，禁止把种子改成 `config.SEED`。`10_positive_control.py`：输出不得进入 `results/tables` 的文稿来源表。`01_mr_estimators.py` 的 `__main__` 自检：不得写 results。README 绝对句：标为不合规；替换句必须等 path/accession/threshold 检索完成后再写，不得提前声称已合规。预期：文档主张改变，表内数字不变。
+2. P1（等价测试通过才许动；失败则保持原文件）。仅在 diff 证明相同后抽取：`resolve_input`/`remote_size` → `code/lib/io_inputs.py`；`_logsum` → `code/lib/logsumexp.py`（须含边界数值测试）；`_find_member`/`genes_near_loci` → `code/lib/locus_index.py`。`zmat`/`build_background`/`draw_module` 默认不共享；仅当得分脚本与零模型脚本对现有表的回归完全一致时，才允许 `code/lib/module_null.py`，否则改名以暴露差异并保持两份。禁止合并 FLOW 阶段脚本。MR 自检移出分析入口到测试入口，保留 `seed=1` 与真值 0.30 作为预言，不改写。删除 “23.28%” 注释，不替换新百分比。增加 SEED 一致性检查：`config.py` 与 `config.R` 不一致则失败，不得静默统一。预期：行为不变；若回归表不一致，停止，不得为通过而改统计代码。
+3. P2 与明确反对。P2：`revision_20261116/` 若仍留在仓库，只做英文注释与身份清除，不重跑、不改种子；文稿文件名本轮不动，另案由用户决定。反对：为减少文件数合并 00–07；删除全部带种子 bootstrap/置换；把示意图改成从错误表或从 README 字符串读取；把 15.0/16.6 版式坐标改成数据驱动；新增任何模拟数据路径；用 `10_positive_control` 填 colocalisation/TCGA/单细胞缺文件；在未定位 CI 来源时重跑增量价值；改 PP.H4 阈值、先验或重抽样单位；把 45 个脚本收成少数巨文件；本轮直接改仓库；把 `skeleton_ebiomedicine.tex` 改名并入代码 PR。
+4. 批准后由主 agent 执行的核对与重跑，本轮不跑。对照表列：claim_id、文本位置、声称值、舍入规则、truth_file、truth_column、truth_value、status（match / rounding_match / mismatch / source_missing / 未核验）、是否会改变已发表数字。必填行只使用已核实事实：clamp rho 0.0976、p_rho 0.00412、61.62%（n_responsive=99）对 README +0.10 与 61.6%，并单列图内 0.098 对 +0.10 的舍入；T2D rho 0.202 对 +0.20；adipose rho 0.313 对 +0.31；delta_auc_IR 0.000389、p_IR 0.15、n=145、events=45 对 README +0.0004、p=0.15、145、45；CI −0.014 to +0.031 标 source_missing，检索 `results/tables/` 后记录真实文件名，找不到则保持未核验，不得假定正确；coloc 503、PP.H4>0.8 共 3（liver 1，muscle 2）、liver 最大 0.931 对 README 0.93、muscle 最大 0.962 不得记成 liver。tex 必须回链到生成它的 tsv，禁止 tex 对 tex。其余 README/tex 句子标未核验，由检索枚举，不得凭记忆加数字。重跑分层：A 不依赖大文件（导入、SEED 一致性、MR 自检、对已存在 tsv 的图加载器黄金对照），缺 tsv 即停；B 依赖本地数据的 coloc/burden/单细胞/MR/跨癌，缺文件非零退出并报告路径，禁止替代输入；C 禁止项为任何新模拟或用功效模拟充当 B。成功标准是 A 通过且 B 要么在预先声明的容差内复现现表，要么缺文件停止；数值不符是发现，不是改到变绿的许可。
+<<<END>>>

@@ -1,0 +1,46 @@
+claim_id	text_location	claimed_value	rounding_rule	source_file	source_column	status	note
+C01	README.md L18; table1_coloc_summary.tex L17	503 tests	exact count	results/tables/coloc_all_tests.tsv	rows	MATCH	503 data rows
+C02	README.md L18; table1 L17	3 tests PP.H4>0.8	exact count	results/tables/coloc_all_tests.tsv	PP.H4>0.8	MATCH	liver 1, muscle 2
+C03	table1 L17	5 tests PP.H4>0.5	exact count	results/tables/coloc_all_tests.tsv	PP.H4>0.5	MATCH
+C04	README.md L26	Liver PP.H4 = 0.93	3 dp	results/tables/coloc_all_tests.tsv	max PP.H4 in Liver = 0.930889	ROUNDING_MATCH
+C05	README.md L25; table1	Muscle PP.H4 = 0.962	3 dp	results/tables/coloc_all_tests.tsv	max PP.H4 in Muscle_Skeletal = 0.962160	MATCH
+C06	table1 L17	201 gene-tissue pairs H3>0.8	exact count	results/tables/coloc_all_tests.tsv	PP.H3>0.8	MATCH
+C07	README.md L19; FLOW L62	862-gene programme	exact count	results/tables/metabolic_program_v2.tsv	rows	MATCH
+C08	FLOW L62	608 up / 254 down	exact count	results/tables/metabolic_program_v2.tsv	direction	MATCH
+C09	README.md L19; figure1 label	adipose rho +0.31	2 dp	results/tables/concordance_by_cohort.tsv	rho for GSE15773 = 0.313316	ROUNDING_MATCH
+C10	README.md; figure1 label	diabetes rho +0.20	2 dp	results/tables/concordance_by_cohort.tsv	rho for GSE18732 = 0.202228	ROUNDING_MATCH
+C11	README.md; figure1 label	clamp rho +0.10	2 dp	results/tables/concordance_by_cohort.tsv	rho for GSE13070 = 0.097615	ROUNDING_MATCH
+C12	README.md L19	61.6% responsive sign concordance	1 dp	results/tables/concordance_by_cohort.tsv	conc_resp for GSE13070 = 61.616	ROUNDING_MATCH	99 responsive genes
+C13	README.md L20	delta AUC +0.0004	4 dp	results/tables/incremental_value.tsv	delta_auc_IR = 0.000389	ROUNDING_MATCH
+C14	README.md L20	empirical p = 0.15	2 dp	results/tables/incremental_value.tsv	p_IR = 0.15	MATCH
+C15	README.md L20	n = 145 tumours; 45 events	exact results/tables/incremental_value.tsv	n; events	MATCH
+C16	README.md L20	95% CI -0.014 to +0.031	3 dp	results/tables/incremental_boot.tsv	boot_lo=-0.013781; boot_hi=0.030858	ROUNDING_MATCH	CI reproduces exactly with v2 inputs; README now states that the point estimate changes sign across CV repetitions
+C17	README.md L26	SKAP1 liver beta -0.25	2 dp	results/tables/skap1_fixed_variant_by_tissue.tsv	beta liver = -0.2495	ROUNDING_MATCH
+C18	README.md L26	SKAP1 pancreas beta -0.25	2 dp	results/tables/skap1_fixed_variant_by_tissue.tsv	beta pancreas = -0.2482	ROUNDING_MATCH
+C19	README.md L27	SKAP1 spleen beta -0.24	2 dp	results/tables/skap1_fixed_variant_by_tissue.tsv	beta spleen = -0.2394	ROUNDING_MATCH
+C20	README.md L27	SKAP1 not shifted in ovary	qualitative	results/tables/skap1_fixed_variant_by_tissue.tsv	ovary beta +0.0968, p=0.333	MATCH
+C21	README.md L21; FLOW L119	141,316 cells	exact count	none in results/tables	NA	SOURCE_MISSING	only in README/FLOW; locate run log or rerun single-cell stage
+C22	README.md L21	29,592 epithelial cells	exact count	none in results/tables	NA	RESOLVED	exact atlas obtained; the code counts 34,625 epithelial cells, and README was corrected from 29,592 to 34,625
+C23	README.md L21; figure1	z = -3.8	1 dp	none in results/tables	NA	SOURCE_MISSING	only in README/FLOW/figure; locate run log or rerun
+C24	skeleton_ebiomedicine.tex L293	51.9% (447/862), p=0.15	1 dp	results/tables/concordance_by_cohort.tsv	conc_all GSE13070 = 51.740; p_all = 0.1616	MISMATCH	old draft; skeleton_v3.tex agrees with the table
+C25	skeleton_ebiomedicine.tex L74	51.9%, p=0.29	2 dp	results/tables/concordance_by_cohort.tsv	p_all GSE13070 = 0.1616	MISMATCH	old draft; p=0.29 absent from current tables
+C26	skeleton_v3.tex L642-643	51.7% (446/862), p=0.16	1 dp	results/tables/concordance_by_cohort.tsv	conc_all = 51.740; p_all = 0.1616	ROUNDING_MATCH	446/862 = 51.74%
+C27	README.md L72-73	only constant fixed in source is the random seed	qualitative	code/**	NA	RESOLVED	README rewritten: seeded analysis path, fixture seed and legacy revision seed are named separately
+C28	README.md L72	no analysis script contains a hard-coded path, accession or threshold	qualitative	code/**	NA	RESOLVED	absolute claim replaced; named algorithmic constants are described as parameters
+C29	code/07_figures/02_figure1_design.py	Layer 3 stem coordinates 0.313/0.202/0.098; labels +0.31/+0.20/+0.10	3 dp / 2 dp	results/tables/concordance_by_cohort.tsv	rho	MATCH	read at run time; golden assertion passes
+C30	figure1 terminal text	Muscle PP.H4 = 0.90	2 dp	results/tables/coloc_all_tests.tsv	max PP.H4 at 17:48127474 in Muscle_Skeletal = 0.897914	ROUNDING_MATCH	top gene at this locus is ENSG00000278765, not SKAP1 itself
+C31	data/README.md L49	programme derivation in code/01_programme/	path	code/03_burden/	NA	RESOLVED	data/README now names the locked 862 table and the legacy w4 builder
+C32	code/00_setup/01_check_inputs.py	GTEx_Analysis_v8_eQTL.tar	file name	code/00_setup/01_check_inputs.py; data/README.md L15	NA	RESOLVED	data/README now lists the v8 eQTL tar required by stage 02 and keeps v11 SuSiE as the fine-mapping input
+C33	docs/FLOW.md Stage 03; code/03_burden/07_incremental_value.py CLI	default invocation reported as reproducing the manuscript	documented command	code/03_burden/07_incremental_value.py	defaults were IR_program_v1.tsv + random_modules_v1.tsv; now v2	RESOLVED	defaults are now metabolic_program_v2.tsv and random_modules_v2.tsv; default run reproduces delta_auc_IR=0.000389
+C34	README/FLOW Stage 01	862-gene programme is built by 03_burden/05_build_programme.py	code ownership	code/03_burden/05_build_programme.py; 06_EC_IR/w4/w4_program_v2.py	rows built	PARTIAL	builder ported to 05b_build_programme_v2.py; the current DE yields 894 genes (40 added, 8 removed), so the builder writes a _rebuild suffix and exits 2; the locked 862 comes from an earlier DE version that is not preserved
+C35	code/03_burden/01_concordance_pipeline.py	concordance rho values are reproducible from package inputs	DE tables	results/tables/DE_GSE13070_muscle_baseline_IR.tsv etc.	missing	RESOLVED	02b_state_programme_de.R reproduces all four DE tables numerically exactly; 01_concordance_pipeline reproduces the rho values and intervals exactly
+C36	results/tables/coloc_all_tests.tsv	503 tests, 3 PP.H4>0.8	exact	rerun per-tissue coloc files	rows	MATCH_AFTER_FIX	first adipose --remote attempt returned 122 tests because a failed tabix call was silent; after checking exit status and retrying, adipose=143 and total=503
+C37	README.md L33-34	p12 1e-6..1e-4 gives 0..7 tests above 0.8	exact	rerun coloc_robustness.tsv	H4>0.8 counts	MATCH	rerun: 0, 3, 3, 5, 7
+C38	results/tables/incremental_value.tsv / incremental_boot.tsv	delta AUC +0.000389; CI -0.01378/+0.03086	exact	rerun incremental_value_v2check.tsv; incremental_boot_v2check.tsv	delta_auc_IR; boot_lo/hi	MATCH	explicit v2 inputs reproduce the main estimate and both CI bounds
+C39	results/tables/mr_results.tsv etc.	MR estimates, conditional F, second outcome	exact	rerun mr_results.tsv etc.	numeric columns	MATCH_ORDER	all numeric values match within 1e-12; harmonised and leave-one-out row order differs
+C40	results/tables/coloc_omara_confirm.tsv	17q21.32 SKAP1 PP.H4 0.915 liver / 0.862 muscle	3 dp	rerun coloc_omara_confirm.tsv	PP.H4	MATCH_SIGNAL_COUNT_DIFF	after fixing the hg19/hg38 window comparison, rerun gives Liver 0.922 and Muscle 0.874 (2 tests >0.8, same conclusion); total tests 352 vs shipped 294, a systematic count difference attributable to the current remote eQTL release (n_snps 2881 vs 2804)
+C41	code/06_cross_cancer/01_map_gene_symbols.R	TCGA matrix rows are HUGO symbols	identifier	type	data/EB++AdjustPANCAN_IlluminaHiSeq_RNASeqV2.geneExp.xena.gz	RESOLVED_APPROX	01_map_gene_symbols.R now writes ENTREZ2SYMBOL.tsv and 02 maps/collapses it; the layer runs, but the reconstruction scores 793/862 genes versus 770/862 in the supplement, so correlation summaries shift slightly	the supplied Xena matrix is keyed by Entrez ids (e.g. 100130426); the script refuses it and the scoring stage needs symbols
+C42	README.md L21; docs/FLOW.md L119	141,316 cells in the integrated atlas	exact count	data/ec_integrated_v1.h5ad	shape	RESOLVED	exact ec_integrated_v1.h5ad (141,316 cells) found and used; 02_null_calibration reproduces z=-3.80 and delta=-0.059
+C43	results/tables/coloc_all_tests.tsv	combined 503-test table	assembly	code/02_colocalisation/07_run_colocalisation.py	per-tissue files only	RESOLVED	07 rebuilds coloc_all_tests.tsv after each tissue; verified 503 rows and 3 PP.H4>0.8
+C44	README.md L21	29,592 epithelial cells	exact count	singlecell_IR_test.tsv	epithelial cells	RESOLVED	code and current manuscript both give 34,625; README corrected
+C45	06_EC_IR/paper_ms/supp_a1a4.tex L109-118	16,313 genes; 770/862 scoreable; median tumour rho -0.029; four >0.4; normal median +0.483	exact	cross-cancer rerun summary.json	genes; prog_coverage; median_rho_tumor	APPROX	Entrez-to-symbol reconstruction gives 16,312 genes, 793/862 scoreable, median -0.0285, three >0.4, normal median +0.473; direction and conclusion unchanged

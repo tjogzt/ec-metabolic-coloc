@@ -19,7 +19,6 @@ The functions, the collapse rule and the z-scoring are imported from stage 07
 rather than re-implemented, so this check cannot drift onto a different scale
 from the model it is meant to constrain.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

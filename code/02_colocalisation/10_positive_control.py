@@ -24,7 +24,6 @@ Both use real variant sets (real positions, alleles and standard errors) and
 only simulate effect sizes, so neither depends on the shape of a synthetic LD
 structure.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -74,7 +73,6 @@ from __future__ import annotations
 
 import argparse
 import pathlib
-import subprocess
 import sys
 import time
 from typing import Dict, List, Optional
@@ -86,8 +84,10 @@ import pandas as pd
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parents[1]))       # repository root, for config/
+sys.path.insert(0, str(HERE.parents[1] / "code"))
 
 from config.config import PATHS, PARAMS, TISSUES, SEED, EQTL_CATALOGUE_BASE
+from common.io_utils import resolve_input, remote_size
 from importlib import import_module
 
 _abf = import_module("05_coloc_abf_engine")
@@ -135,36 +135,6 @@ POWER_GENE = "ENSG00000197140"
 
 POWER_COLS = ["eQTL_z", "GWAS_z", "H4_median", "H4_p25", "H4_p75",
               "detect_rate_H4_gt_0.8", "H3_median"]
-
-
-def resolve_input(name: str) -> pathlib.Path:
-    """Resolve a user-supplied file name against the data directory."""
-    path = pathlib.Path(name)
-    return path if path.is_absolute() else PATHS.data / path
-
-
-def remote_size(url: str) -> int:
-    """Content-Length of a remote file, or 0 when it cannot be read.
-
-    Parameters
-    ----------
-    url : HTTP(S) location of the file.
-
-    Returns
-    -------
-    Size in bytes, or 0 when the request failed. Zero is not treated as an
-    error: the run may legitimately be offline, in which case the local file
-    cannot be validated but can still be used.
-    """
-    proc = subprocess.run(["curl", "-sI", "-m", "60", url],
-                          capture_output=True, text=True)
-    for line in proc.stdout.splitlines():
-        if line.lower().startswith("content-length"):
-            try:
-                return int(line.split(":", 1)[1].strip())
-            except ValueError:
-                return 0
-    return 0
 
 
 def local_eqtl(qtd: str) -> pathlib.Path:

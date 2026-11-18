@@ -14,7 +14,6 @@ independent variant, in GRCh38 coordinates, holding everything the downstream
 stages need: effect allele, other allele, per-allele effect, standard error,
 p-value and allele frequency.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -56,8 +55,7 @@ Notes
 -----
 Why the sample-size floor for fasting insulin. GCST90002238 is a meta-analysis
 of many cohorts and contains a large homogeneous block of rows with N = 7,428
-(23.28% of its genome-wide significant rows) contributed by a single
-underpowered study. Those rows are not independent of the rest, they carry
+contributed by a single underpowered study. Those rows are not independent of the rest, they carry
 inflated effect sizes, and they would swamp a p-value-based instrument set. The
 N >= mr_min_n filter isolates and removes that block. BMI is exempt because the
 BMI file carries no per-variant sample size: its N is the fixed meta-analysis

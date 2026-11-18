@@ -15,7 +15,6 @@ This is the step where the three data sources are reconciled:
     exposure 2  BMI,             GCST006900,   GRCh37, with rsIDs
     outcome     endometrial cancer, GWAS_PRIMARY_FILE, GRCh38, with rsIDs
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

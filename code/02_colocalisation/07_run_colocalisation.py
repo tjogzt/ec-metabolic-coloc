@@ -12,7 +12,6 @@ tissue, restricts the eQTL table to the padded window, joins the two datasets on
 position and allele, and tests whether one shared causal variant is more likely
 than two distinct ones.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -36,6 +35,9 @@ results/tables/coloc_<tissue>.tsv with one row per gene-locus pair:
     tissue, locus    GTEx tissue and "chrom:lead_position"
     gene_id          Ensembl id of the eQTL gene
     best_gwas_p      strongest risk association inside the window
+
+results/tables/coloc_all_tests.tsv is rebuilt after every tissue from the
+per-tissue files, so the table the figures read cannot go stale.
 
 Notes
 -----
@@ -72,6 +74,33 @@ _eqtl = import_module("03_eqtl_catalogue_reader")
 _loci = import_module("06_define_risk_loci")
 
 
+COMBINED_COLUMNS = ["PP.H0", "PP.H1", "PP.H2", "PP.H3", "PP.H4", "n_snps",
+                    "top_snp_share", "tissue", "locus", "gene_id",
+                    "best_gwas_p"]
+
+
+def write_combined() -> None:
+    """Assemble the per-tissue tables into ``coloc_all_tests.tsv``.
+
+    The figures read one combined table. Building it here keeps the combined
+    file in step with the per-tissue results and avoids a separate manual
+    assembly step. Tissues that have not been run yet are simply absent, and
+    the count is printed so a partial run is visible.
+    """
+    frames = []
+    for tissue in TISSUES:
+        path = PATHS.tables / f"coloc_{tissue}.tsv"
+        if path.exists():
+            frames.append(pd.read_csv(path, sep="\t"))
+    if not frames:
+        return
+    combined = pd.concat(frames, ignore_index=True)[COMBINED_COLUMNS]
+    dest = PATHS.tables / "coloc_all_tests.tsv"
+    combined.to_csv(dest, sep="\t", index=False)
+    print(f"[combine] {len(combined)} tests from {len(frames)}/{len(TISSUES)} "
+          f"tissues -> {dest.name}", flush=True)
+
+
 def fetch_regions_remote(url: str, regions: Dict[str, List[Tuple[int, int]]],
                          out_path: pathlib.Path, want) -> int:
     """Pull the loci windows from a remote tabix endpoint.
@@ -100,8 +129,18 @@ def fetch_regions_remote(url: str, regions: Dict[str, List[Tuple[int, int]]],
         out.write("\t".join(_eqtl.OUT_COLS) + "\n")
         for chrom, spans in regions.items():
             for lo, hi in spans:
-                proc = subprocess.run(["tabix", url, f"{chrom}:{lo}-{hi}"],
-                                      capture_output=True, text=True)
+                last_error = ""
+                for attempt in range(3):
+                    proc = subprocess.run(["tabix", url, f"{chrom}:{lo}-{hi}"],
+                                          capture_output=True, text=True)
+                    if proc.returncode == 0:
+                        break
+                    last_error = proc.stderr.strip() or f"exit {proc.returncode}"
+                    time.sleep(2 ** attempt)
+                else:
+                    raise RuntimeError(
+                        f"tabix failed for {url} {chrom}:{lo}-{hi} after 3 "
+                        f"attempts: {last_error}")
                 for line in proc.stdout.strip().split("\n"):
                     if not line:
                         continue
@@ -168,8 +207,9 @@ def main() -> None:
     if args.remote:
         url = f"{EQTL_CATALOGUE_BASE}/{qtl_id}/{qtl_id}.all.tsv.gz"
         if args.force_rescan or not subset.exists():
-            n = fetch_regions_remote(url, regions, subset, _eqtl.column_positions(local_eqtl)
-                                     if local_eqtl.exists() else list(range(len(_eqtl.OUT_COLS))))
+            want = (_eqtl.column_positions(local_eqtl) if local_eqtl.exists()
+                    else _eqtl.positions_from_header(_eqtl.remote_header(url)))
+            n = fetch_regions_remote(url, regions, subset, want)
             print(f"[3/4] remote fetch: {n:,} rows", flush=True)
     else:
         if not local_eqtl.exists():
@@ -242,6 +282,7 @@ def main() -> None:
     out.to_csv(dest, sep="\t", index=False)
 
     print(f"[4/4] {len(out)} tests -> {dest.name}", flush=True)
+    write_combined()
     print(f"      PP.H4>0.8: {(out['PP.H4'] > PARAMS.pp_h4_high).sum()}"
           f"  PP.H4>0.5: {(out['PP.H4'] > 0.5).sum()}"
           f"  max PP.H4: {out['PP.H4'].max():.3f}"

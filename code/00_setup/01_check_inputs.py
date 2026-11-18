@@ -12,7 +12,6 @@ returns no tests instead of an error: tabix reports success on an unindexed or
 partially downloaded file, and the stage then writes an empty table. Checking
 first turns that silent failure into a clear message.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

@@ -16,7 +16,6 @@ pair of traits measured on the same set of variants:
     H3  association with both traits, two distinct causal variants
     H4  association with both traits, one shared causal variant
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -49,9 +48,19 @@ Wakefield J. Genet Epidemiol 2009;33:79-86.
 from __future__ import annotations
 
 import math
+import pathlib
+import sys
 from typing import Dict
 
 import numpy as np
+
+_ROOT = pathlib.Path(__file__).resolve().parents[2]
+if str(_ROOT) not in sys.path:
+    sys.path.insert(0, str(_ROOT))
+if str(_ROOT / "code") not in sys.path:
+    sys.path.insert(0, str(_ROOT / "code"))
+
+from common.numerics import logsum as _logsum  # noqa: E402
 
 # Default priors, identical to coloc::coloc.abf.
 P1_DEFAULT = 1e-4
@@ -99,22 +108,6 @@ def log_abf(beta: np.ndarray, se: np.ndarray, sd_y: float,
     r = W / (W + V)                  # shrinkage factor
     z2 = (beta / se) ** 2            # squared z statistic
     return 0.5 * np.log(1.0 - r) + 0.5 * r * z2
-
-
-def _logsum(x: np.ndarray) -> float:
-    """Numerically stable log(sum(exp(x))).
-
-    Shifting by the maximum before exponentiation prevents underflow when the
-    log Bayes factors are very negative, which is the normal case for variants
-    that show no association.
-    """
-    x = np.asarray(x, dtype=float)
-    if x.size == 0:
-        return -np.inf
-    m = np.max(x)
-    if not np.isfinite(m):
-        return -np.inf
-    return float(m + math.log(np.sum(np.exp(x - m))))
 
 
 def coloc_abf(l1: np.ndarray, l2: np.ndarray,

@@ -1,0 +1,10 @@
+{
+  "n_tumor": 30,
+  "n_normal": 13,
+  "frac_rho_gt_0.4": 0.1,
+  "median_rho_tumor": -0.03242234578272177,
+  "median_rho_normal": 0.4659808428342886,
+  "prog_coverage": "791/860",
+  "alpha": 0.05,
+  "n_p_emp_below_alpha": 2
+}

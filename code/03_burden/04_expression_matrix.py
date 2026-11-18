@@ -23,7 +23,6 @@ amounts of network time and are useful at different moments:
                directly. esummary is not used for this because it mixes nested
                Sample nodes into the count and inflates it.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

@@ -14,7 +14,6 @@
 # ("Gene Symbol" on GPL570, "GENE_SYMBOL" on GPL6480), so several candidates are
 # retained and the choice is made downstream by 02_differential_expression.R.
 #
-# Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 # Created  : 2026-11-11
 # Version  : 2.0.0
 #

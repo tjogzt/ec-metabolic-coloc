@@ -26,7 +26,6 @@ Two null modes are offered:
     perm    full permutation. Destroys the clustering as well, which makes the
             null too wide and the test conservative.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

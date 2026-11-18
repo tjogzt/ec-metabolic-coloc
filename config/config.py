@@ -11,7 +11,6 @@ No analysis script may embed a path, an accession or a threshold. All of them
 are resolved here, so that a single edit (or a single environment variable)
 re-points the whole pipeline.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0 (replication package restructure)
 
@@ -98,6 +97,11 @@ PATHS = _resolve_paths()
 # Master random seed: the single fixed constant in this file
 # --------------------------------------------------------------------------
 SEED: int = int(os.environ.get("ECIR_SEED", 49))
+
+# Seed that generated the locked v2 random modules. It is separate from SEED so
+# that changing the general analysis seed cannot silently change the null
+# distribution stored alongside the locked programme.
+PROGRAMME_V2_SEED: int = int(os.environ.get("ECIR_PROGRAMME_V2_SEED", 20261103))
 
 # --------------------------------------------------------------------------
 # Analysis parameters
@@ -219,6 +223,9 @@ EQTL_CATALOGUE_BASE = os.environ.get(
 # Lift-over chains are downloaded by stage 02/00_download_inputs.sh.
 CHAIN_HG19_TO_HG38 = "hg19ToHg38.over.chain.gz"
 CHAIN_HG38_TO_HG19 = "hg38ToHg19.over.chain.gz"
+
+# Entrez-to-symbol map used when the TCGA matrix row identifiers are Entrez ids.
+TCGA_SYMBOL_MAP = os.environ.get("ECIR_TCGA_SYMBOL_MAP", "ENTREZ2SYMBOL.tsv")
 
 # --------------------------------------------------------------------------
 # eQTL Catalogue datasets, by GTEx tissue label used in the manuscript

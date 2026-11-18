@@ -19,7 +19,6 @@ between 0.05 and 0.45 removes the ones that are trivially easy to align (very
 rare or very common), so the comparison is made where a flip would actually
 matter.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

@@ -22,7 +22,6 @@
 # collapsed into one: a 0.3 log2 change is a meaningful insulin response in a
 # paired muscle biopsy, and a meaningless one in a 91-vs-11 tumour comparison.
 #
-# Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 # Created  : 2026-11-11
 # Version  : 2.0.0
 #

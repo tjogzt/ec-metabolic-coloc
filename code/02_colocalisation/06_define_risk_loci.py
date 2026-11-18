@@ -11,7 +11,6 @@ The gene list comes from the GTEx significant variant-gene pairs archive, which
 ships as a single tar of per-tissue tables. Only the one member that is needed
 is read; the archive is never unpacked.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

@@ -22,7 +22,6 @@ The atlas holds 141,316 cells x 36,601 genes from 11 samples: four normal
 (NE1-NE4) and seven malignant (HEEC/MEEC/LEEC), assembled from GSE278879
 (11 snRNA samples) and GSE251923 (2 scRNA samples).
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

@@ -28,7 +28,6 @@ about a single reported hit, and each is independent of the others:
                p, and the effect size there. This separates "not expressed" from
                "not tested".
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

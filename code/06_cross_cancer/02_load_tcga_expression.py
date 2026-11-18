@@ -13,7 +13,6 @@ The matrix is streamed rather than parsed as a whole: the full file is roughly
 20,000 genes by 11,000 samples, which pandas would materialise densely in
 memory. Streaming keeps peak memory proportional to the retained columns.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -68,7 +67,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[2]))
-from config.config import PATHS  # noqa: E402
+from config.config import PATHS, TCGA_SYMBOL_MAP  # noqa: E402
 import config.config as _config  # noqa: E402
 
 # Matrix file name as documented in data/README.md.
@@ -141,12 +140,27 @@ def row_values(line: str, n_cols: int, idx_keep: List[int]) -> Tuple[str, np.nda
     return p[0], vals
 
 
+def load_symbol_map(path: pathlib.Path) -> dict:
+    """Read an ENTREZID-to-SYMBOL table, or return an empty map."""
+    if not path.exists():
+        return {}
+    frame = pd.read_csv(path, sep="\t", dtype=str)
+    missing = {"ENTREZID", "SYMBOL"} - set(frame.columns)
+    if missing:
+        raise SystemExit(f"symbol map {path} lacks column(s): {sorted(missing)}")
+    frame = frame.dropna(subset=["ENTREZID", "SYMBOL"])
+    return dict(zip(frame["ENTREZID"], frame["SYMBOL"]))
+
+
 def main() -> None:
     PATHS.ensure()
     t0 = time.time()
 
     expr_path = PATHS.data / EXPR_FILE
     pheno_path = PATHS.data / PHENO_FILE
+    symbol_map = load_symbol_map(PATHS.data / TCGA_SYMBOL_MAP)
+    if symbol_map:
+        print(f"Symbol map: {len(symbol_map):,} Entrez-to-symbol rows", flush=True)
     for p in (expr_path, pheno_path):
         if not p.exists():
             raise SystemExit(f"missing input: {p}\nsee data/README.md for how to obtain it")
@@ -171,8 +185,11 @@ def main() -> None:
     keep_names = [cols[i] for i in idx_keep]
     print(f"Matrix: {len(cols)} columns, {len(idx_keep)} retained", flush=True)
 
-    genes: List[str] = []
-    blocks: List[np.ndarray] = []
+    # Rows are collapsed by symbol while streaming. Several Entrez ids can map
+    # to one symbol; averaging keeps one row per symbol without materialising
+    # the full duplicate matrix first.
+    sums: dict = {}
+    counts: dict = {}
     n_seen = 0
     try:
         for line in fh:
@@ -181,24 +198,28 @@ def main() -> None:
             if parsed is None:
                 continue
             symbol, vals = parsed
+            symbol = symbol_map.get(symbol, symbol)
             # Low-expression filter: unexpressed genes would only enlarge the
             # decile-matched null pool without carrying signal.
             if vals.mean() < MIN_MEAN_EXPRESSION:
                 continue
-            genes.append(symbol)
-            blocks.append(vals)
-            if len(genes) % 2000 == 0:
-                print(f"  {len(genes)} genes kept of {n_seen} seen ... "
+            if symbol in sums:
+                sums[symbol] += vals
+                counts[symbol] += 1
+            else:
+                sums[symbol] = vals.copy()
+                counts[symbol] = 1
+            if len(sums) % 2000 == 0 and counts.get(symbol) == 1:
+                print(f"  {len(sums)} genes kept of {n_seen} seen ... "
                       f"{time.time() - t0:.0f}s", flush=True)
     finally:
         fh.close()
 
-    if not blocks:
+    if not sums:
         raise SystemExit("no gene passed the expression filter; check the matrix file")
 
-    # Stack once after the loop: vstack over a list of small rows is cheap,
-    # whereas growing one array row by row would reallocate every iteration.
-    X = np.vstack(blocks)
+    genes = list(sums)
+    X = np.vstack([sums[g] / counts[g] for g in genes])
     print(f"Retained {X.shape[0]} genes x {X.shape[1]} samples "
           f"({time.time() - t0:.0f}s)", flush=True)
 

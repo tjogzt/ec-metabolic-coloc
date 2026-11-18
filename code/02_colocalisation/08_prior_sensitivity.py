@@ -17,7 +17,6 @@ expose:
     4. Bayesian FDR      expected number of false discoveries among the tests
                          declared positive, computed as sum(1 - PP.H4)
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -59,25 +58,16 @@ import pandas as pd
 HERE = pathlib.Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parents[1]))
+sys.path.insert(0, str(HERE.parents[1] / "code"))
 
 from importlib import import_module
 
 from config.config import PATHS, PARAMS, TISSUES, GWAS_PRIMARY_FILE
+from common.numerics import logsum as _logsum
 
 _abf = import_module("05_coloc_abf_engine")
 _gwas = import_module("02_gwas_reader")
 _loci = import_module("06_define_risk_loci")
-
-
-def _logsum(x: np.ndarray) -> float:
-    """Numerically stable log(sum(exp(x))); returns -inf for an empty input."""
-    x = np.asarray(x, dtype=float)
-    if x.size == 0:
-        return -np.inf
-    m = float(np.max(x))
-    if not np.isfinite(m):
-        return -np.inf
-    return float(m + math.log(np.sum(np.exp(x - m))))
 
 
 def posteriors(l1: np.ndarray, l2: np.ndarray, p12: float,

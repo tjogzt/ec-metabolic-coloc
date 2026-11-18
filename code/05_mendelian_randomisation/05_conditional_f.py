@@ -15,7 +15,6 @@ independent instrument strength once the other exposure is controlled, and the
 leave-one-out analysis asks whether the causal estimate survives removal of any
 one variant.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

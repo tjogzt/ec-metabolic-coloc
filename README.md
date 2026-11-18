@@ -17,8 +17,8 @@ measures insulin resistance. The answer differs by layer.
 |---|---|
 | Colocalisation | 503 gene–locus tests in five tissues; 3 exceed PP.H4 > 0.8 at the primary prior, but only the **17q21.32** signal survives a change of risk dataset |
 | Programme validity | An obesity-derived programme (862 genes) tracks clamp-defined insulin resistance weakly: rank correlation **+0.10** (p = 0.004), 61.6% sign concordance among responsive genes |
-| Incremental value | **ΔAUC = +0.0004** over a base clinical model (95% CI −0.014 to +0.031; p = 0.15, 145 tumours, 45 events); no evidence of value, but increments up to ~0.03 not excluded |
-| Single cell | 141,316 cells, 29,592 epithelial; programme score does not separate malignant from normal epithelium (z = −3.8, below the prespecified bar) |
+| Incremental value | **ΔAUC = +0.0004** over a base clinical model (95% CI −0.014 to +0.031; p = 0.15, 145 tumours, 45 events); the point estimate changes sign when the cross-validation is repeated, so this is no evidence of value rather than evidence of equivalence, and increments up to ~0.03 are not excluded |
+| Single cell | 141,316 cells, 34,625 epithelial; programme score does not separate malignant from normal epithelium (z = −3.8, below the prespecified bar) |
 
 The shared signal at 17q21.32 is the only positive genetic finding: at the lead
 eQTL variant the allele that lowers *SKAP1* expression raises endometrial cancer
@@ -69,8 +69,14 @@ is also the run order within a stage.
 ## Configuration
 
 Every path and parameter is resolved in `config/config.py` (and `config/config.R`
-for the R stages). No analysis script contains a hard-coded path, accession or
-threshold. The only constant fixed in source is the random seed.
+for the R stages). Analysis code does not embed result values: tables and figures
+that restate a published number read it from `results/tables`. Randomness in the
+analysis path is seeded from `config.SEED` or a `--seed` flag. Two fixed seeds
+sit outside that path: the synthetic self-test in
+`code/05_mendelian_randomisation/01_mr_estimators.py` (seed 1, writes no result)
+and the legacy scripts under `revision_20261116/` (not part of the formal flow).
+Some stage scripts keep named algorithmic constants, such as the coupling
+fraction and the expression floor; these are parameters, not results.
 
 Override anything through the environment:
 

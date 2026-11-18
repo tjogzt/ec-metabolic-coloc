@@ -15,7 +15,6 @@ allele. Three public file layouts are handled:
 Column names are resolved through a layout table rather than hard-coded, so a
 new release adds one entry instead of editing the analysis code.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

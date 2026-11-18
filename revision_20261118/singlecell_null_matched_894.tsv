@@ -1,0 +1,2 @@
+observed	null_mean	null_sd	null_p95	z	p_upper	p_lower	p_two_sided	n_null	n_up	n_down	mwu_p
+-0.0530108	0.00018015881	0.018091422	0.033410415053367615	-2.9401205	1.0	0.0	0.0	100	619	251	0.10909090909090909

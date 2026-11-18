@@ -1,0 +1,36 @@
+{
+  "total_cost_usd": 0.31437,
+  "total_tokens": 132907,
+  "by_member": {
+    "cn-deepseek": {
+      "calls": 4,
+      "tokens": 22450,
+      "cost": 0.022813800000000002
+    },
+    "cn-glm": {
+      "calls": 2,
+      "tokens": 11259,
+      "cost": 0.042426240000000004
+    },
+    "cn-kimi": {
+      "calls": 2,
+      "tokens": 15430,
+      "cost": 0.034032335999999996
+    },
+    "intl-mistral": {
+      "calls": 2,
+      "tokens": 21862,
+      "cost": 0.03388952
+    },
+    "intl-xai": {
+      "calls": 2,
+      "tokens": 37533,
+      "cost": 0.173542
+    },
+    "intl-nvidia": {
+      "calls": 2,
+      "tokens": 24373,
+      "cost": 0.00766651
+    }
+  }
+}

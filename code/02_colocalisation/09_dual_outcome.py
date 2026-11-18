@@ -26,7 +26,6 @@ drops variants whose identifier is missing or differs between releases, and it
 hides orientation errors; the allele-aware reader in 02_gwas_reader flips the
 sign when the outcome stores the alleles in the opposite order.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -216,19 +215,13 @@ def want_columns(src: str) -> List[int]:
 
     Notes
     -----
-    The layout is read from a header, never assumed. A remote URL cannot be
-    opened for its header, so the header of any local eQTL file is used as the
-    donor: every GTEx v8 release of the eQTL Catalogue shares one column order.
-    Lacking both, the run stops rather than reading the wrong columns.
+    The layout is read from a header, never assumed. For a remote URL the
+    header is fetched from the endpoint itself, so no local donor file is
+    required and the column order cannot be inferred from a different release.
     """
-    if not str(src).startswith(("http://", "https://")):
-        return _eqtl.column_positions(src)
-
-    donors = sorted(PATHS.data.glob("*.all.tsv.gz"))
-    if not donors:
-        raise SystemExit("remote eQTL source: at least one local "
-                         "*.all.tsv.gz is needed to read the column layout")
-    return _eqtl.column_positions(donors[0])
+    if str(src).startswith(("http://", "https://")):
+        return _eqtl.positions_from_header(_eqtl.remote_header(src))
+    return _eqtl.column_positions(src)
 
 
 def load_tissue_variants(loc38: pd.DataFrame, qtd: str, tissue: str,
@@ -351,11 +344,12 @@ def tests_for_tissue(tissue: str, loc38: pd.DataFrame,
         if not genes:
             continue
 
-        chrom, lead = str(row["chrom"]), int(row["lead"])
+        chrom = str(row["chrom"])
+        lead19 = int(row["lead19"])
         window = qtl_all[
             (qtl_all["chromosome"].astype(str) == chrom)
-            & (qtl_all["pos19"].between(lead - PARAMS.region_pad_bp,
-                                        lead + PARAMS.region_pad_bp))]
+            & (qtl_all["pos19"].between(lead19 - PARAMS.region_pad_bp,
+                                        lead19 + PARAMS.region_pad_bp))]
         if window.empty:
             continue
 

@@ -11,7 +11,6 @@ Draw the two supplementary Mendelian randomisation figures:
                effect of fasting insulin and BMI on endometrial cancer
     Figure S2  leave-one-out plot of the fasting insulin IVW estimate
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

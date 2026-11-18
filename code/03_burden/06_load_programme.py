@@ -14,7 +14,6 @@ deliberately downstream of 05: the programme is read from the tables directory
 as a frozen artefact and never recomputed here, so a change in the scoring code
 cannot silently redefine what is being scored.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

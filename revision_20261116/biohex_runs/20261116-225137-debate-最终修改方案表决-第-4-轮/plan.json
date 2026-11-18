@@ -1,0 +1,37 @@
+{
+  "mode": "debate",
+  "reason": "用户显式指定debate模式，且方案涉及统计裁决、文本一致性、审计协议等多学科交叉争议，需多轮质证收敛。",
+  "rounds": 2,
+  "focus": [
+    "裁决1与裁决2的隔离措施是否充分且不引入新风险",
+    "P0卫生修复中黄金对照失败即停的触发条件与回滚策略",
+    "README措辞修改的可验证性及与config.SEED的一致性",
+    "核对协议中skeleton_ebiomedicine.tex不一致的处理边界",
+    "P1去重抽取的三重门槛是否可操作且不改变数值结果",
+    "P2重跑台账阶段划分与缺失文件处理是否完备"
+  ],
+  "groups": [
+    [
+      "cn-deepseek",
+      "cn-kimi",
+      "intl-xai"
+    ],
+    [
+      "cn-glm",
+      "intl-mistral",
+      "intl-nvidia"
+    ]
+  ],
+  "producer": null,
+  "source": "leader",
+  "raw_plan": "{\n  \"mode\": \"debate\",\n  \"reason\": \"用户显式指定debate模式，且方案涉及统计裁决、文本一致性、审计协议等多学科交叉争议，需多轮质证收敛。\",\n  \"rounds\": 3,\n  \"focus\": [\n    \"裁决1与裁决2的隔离措施是否充分且不引入新风险\",\n    \"P0卫生修复中黄金对照失败即停的触发条件与回滚策略\",\n    \"README措辞修改的可验证性及与config.SEED的一致性\",\n    \"核对协议中skeleton_ebiomedicine.tex不一致的处理边界\",\n    \"P1去重抽取的三重门槛是否可操作且不改变数值结果\",\n    \"P2重跑台账阶段划分与缺失文件处理是否完备\"\n  ],\n  \"groups\": [\n    [\"cn-deepseek\", \"cn-glm\", \"cn-kimi\", \"intl-mistral\", \"intl-xai\", \"intl-nvidia\"]\n  ],\n  \"producer\": null\n}",
+  "effort": {
+    "cn-deepseek": "max",
+    "cn-glm": "max",
+    "cn-kimi": "max",
+    "intl-mistral": "max",
+    "intl-xai": "max",
+    "intl-nvidia": "max"
+  },
+  "round_effort": {}
+}

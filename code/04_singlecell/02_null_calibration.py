@@ -25,7 +25,6 @@ the same UP - DOWN difference is formed, and the same sample-level contrast
 (malignant mean minus normal mean) is taken. The observed value is placed in
 that null.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

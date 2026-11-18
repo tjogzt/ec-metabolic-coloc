@@ -25,7 +25,6 @@ must agree on all three for the comparison to mean anything:
     diagnostics  univariate AUCs and correlations with the clinical covariates,
                  used to explain a null result rather than assert one.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
@@ -33,10 +32,17 @@ Inputs
 ------
 PATHS.data/GSE120490_series_matrix.txt.gz   145 tumours, 45 metastasis events
 PATHS.data/GPL570_annot.tsv                 probe-to-symbol map
-PATHS.tables/IR_program_v1.tsv              programme (``--programme`` overrides)
-PATHS.tables/random_modules_v1.tsv          null modules (``--modules`` overrides)
+PATHS.tables/metabolic_program_v2.tsv       locked 862-gene programme
+                                            (``--programme`` overrides)
+PATHS.tables/random_modules_v2.tsv          matched null modules
+                                            (``--modules`` overrides)
 PATHS.tables/incremental_null<tag>.tsv      written by --step main, read by
                                             --step bootstrap and --step adjusted
+
+The defaults are the programme and modules reported in the manuscript. The
+earlier insulin-response definition is still available as
+``IR_program_v1.tsv`` with ``random_modules_v1.tsv``; pass both explicitly to
+reproduce that superseded result.
 
 config.SEED                    seed for the CV splits and the bootstrap
 config.PARAMS.n_bootstrap      bootstrap resamples
@@ -54,8 +60,8 @@ Usage
     python code/03_burden/07_incremental_value.py                    # main
     python code/03_burden/07_incremental_value.py --step all
     python code/03_burden/07_incremental_value.py --step bootstrap \
-        --programme metabolic_program_v2.tsv --modules random_modules_v2.tsv \
-        --tag _v2
+        --programme IR_program_v1.tsv --modules random_modules_v1.tsv \
+        --tag _v1
 
 Notes
 -----
@@ -800,9 +806,9 @@ def main() -> None:
     ap.add_argument("--step", default="main",
                     choices=("main", "adjusted", "bootstrap", "diagnostics", "all"),
                     help="which analysis to run (default: main)")
-    ap.add_argument("--programme", default="IR_program_v1.tsv",
+    ap.add_argument("--programme", default="metabolic_program_v2.tsv",
                     help="programme table inside the tables directory")
-    ap.add_argument("--modules", default="random_modules_v1.tsv",
+    ap.add_argument("--modules", default="random_modules_v2.tsv",
                     help="random-module table inside the tables directory")
     ap.add_argument("--tag", default="",
                     help="suffix for the output file names, e.g. _v2")

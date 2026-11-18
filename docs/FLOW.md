@@ -46,31 +46,44 @@ Verify the tree before running anything:
 python code/00_setup/01_check_inputs.py
 ```
 
-## Stage 01 — the 862-gene state programme
+## Stage 01 — the programme definitions
 
-Implemented in `code/03_burden/`, because the programme is derived from the same
-cohort data that later carries the burden analyses.
+Implemented in `code/03_burden/`. Two definitions are kept.
 
-Inputs: GEO series GSE15773 (adipose), GSE18732 (muscle, diagnosed type 2
-diabetes), GSE13070 (muscle, clamp-defined insulin resistance).
+**Reported definition (obesity-associated, 862 genes).** The discovery contrast is
+GSE25401 adipose obese versus non-obese. The four DE tables used downstream are
+built by `02b_state_programme_de.R`:
 
-The programme is derived from differential expression between insulin-resistant
-and insulin-sensitive samples, taken in the direction that is reproducible across
-cohorts. Outcome labels are never used, so the programme cannot be tuned towards
-the endometriotic cancer endpoint.
+```bash
+Rscript code/03_burden/02b_state_programme_de.R
+python  code/03_burden/05b_build_programme_v2.py
+```
 
-Output: `results/tables/metabolic_program_v2.tsv` (608 up, 254 down).
+`05b_build_programme_v2.py` writes the locked 862-gene table
+(`metabolic_program_v2.tsv`, 608 up / 254 down) and its 100 matched modules. The
+current DE table yields a 894-gene rebuild, because the DE table was regenerated
+after the locked programme was produced. The builder therefore writes
+`metabolic_program_v2_rebuild.tsv` and `random_modules_v2_rebuild.tsv` and exits
+2 when the gene set differs; it never overwrites the locked table. The 48-gene
+difference is documented in `06_EC_IR/w4/dryrun_894.py`.
+
+**Earlier definition (insulin-response, 146 genes).** Built from GSE24215 and
+GSE24422:
 
 ```bash
 Rscript code/03_burden/02_differential_expression.R
 python  code/03_burden/05_build_programme.py
 ```
 
-`01_concordance_pipeline.py` computes rank correlation between the programme
-score and phenotype in each cohort, which is the proxy-validity ladder reported
-in the paper: +0.31 (adipose, clinical grouping), +0.20 (muscle, diagnosed T2D),
-+0.10 (muscle, clamp). The ladder is monotone in the strictness of the phenotype,
-which is the finding.
+This writes `IR_program_v1.tsv` and `random_modules_v1.tsv` and is retained for
+provenance; it is not the definition reported in the paper.
+
+`01_concordance_pipeline.py` computes rank correlation between the locked
+programme score and phenotype in each cohort, which is the proxy-validity ladder
+reported in the paper: +0.31 (adipose, clinical grouping), +0.20 (muscle,
+diagnosed T2D), +0.10 (muscle, clamp). The ladder is monotone in the strictness
+of the phenotype, which is the finding. Its inputs are the three DE tables
+written by `02b_state_programme_de.R`.
 
 ## Stage 02 — colocalisation
 
@@ -109,10 +122,19 @@ Output: `results/tables/incremental_value.tsv` and `incremental_boot.tsv`.
 python code/03_burden/07_incremental_value.py
 ```
 
+The defaults are the definitions reported in the paper: the locked 862-gene
+programme (`metabolic_program_v2.tsv`) and its matched random modules
+(`random_modules_v2.tsv`). The earlier insulin-response definition is still
+reproducible by passing `--programme IR_program_v1.tsv --modules
+random_modules_v1.tsv --tag _v1`.
+
 The bootstrap resamples patients, never cells or probes; the statistic is a
 difference in cross-validated AUC, so a positive point estimate with a confidence
 interval spanning zero is reported as "no evidence of incremental value", never
-as equivalence.
+as equivalence. The `delta_auc` column of the bootstrap table is one
+cross-validation realisation used to centre the interval; the reported point
+estimate is `delta_auc_IR` in `incremental_value.tsv`, and the two need not have
+the same sign.
 
 ## Stage 04 — single-cell projection
 
@@ -157,6 +179,13 @@ python  code/06_cross_cancer/02_load_tcga_expression.py
 python  code/06_cross_cancer/03_score_across_cancers.py
 python  code/06_cross_cancer/04_normal_tissue_null.py
 ```
+
+The retrieved Xena matrix is keyed by Entrez id. `01_map_gene_symbols.R` writes
+`data/ENTREZ2SYMBOL.tsv` from `org.Hs.eg.db`, and stage 02 applies it while
+streaming, collapsing several Entrez rows onto one symbol by their mean. This is
+a reconstruction of the symbol-keyed matrix used for the paper, not the original
+object; the scoreable programme fraction and the correlation summaries can shift
+slightly.
 
 Random modules are matched to the real programme on size, on expression decile
 and on the up/down split. A null distribution built from unmatched modules is

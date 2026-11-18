@@ -27,7 +27,6 @@ The rules were fixed against the candidate list before any series was read, and
 are reproduced here unchanged so that a re-run with the same list gives the same
 labels.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 

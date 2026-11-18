@@ -14,7 +14,6 @@ from tens of samples is wide. Without a null of matching size and expression
 content, a positive rho in a normal group could not be attributed to the
 programme rather than to the small sample.
 
-Author   : Tao Zhu (zhutao@tjh.tjmu.edu.cn)
 Created  : 2026-11-11
 Version  : 2.0.0
 
