@@ -162,7 +162,7 @@ pA <- ggplot(d, aes(loc_lab, PP.H4)) +
              alpha = 0.85) +
   geom_point(data = untested, aes(loc_lab, y = 0), shape = 4, size = 1.5,
              colour = "grey60", inherit.aes = FALSE) +
-  annotate("text", x = 0.65, y = 0.83, label = "0.8 threshold", size = 3.4,
+  annotate("text", x = 0.65, y = 0.83, label = "0.8 threshold", size = 3.75,
            colour = GREY, hjust = 0, vjust = 0) +
   scale_colour_manual(values = TIS_COL, labels = TIS_LAB, name = NULL) +
   scale_size_continuous(range = c(0.7, 3.0), guide = "none") +
@@ -173,9 +173,10 @@ pA <- ggplot(d, aes(loc_lab, PP.H4)) +
                           nrow(d), n_cells - n_tested, n_cells),
        x = "Locus (chromosome:position, Mb)",
        y = "PP.H4 (shared causal variant)") +
-  theme_ec(9.6) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 9.6),
-        plot.subtitle = element_text(lineheight = 1.35))
+  theme_ec(10.6) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 10.6),
+        plot.subtitle = element_text(lineheight = 1.35),
+        plot.margin = ggplot2::margin(5.5, 5.5, 5.5, 8.5, unit = "pt"))
 
 # ---------------- panel B: the tests worth naming --------------------------
 top <- subset(d, PP.H4 > 0.5)
@@ -191,9 +192,10 @@ pB <- ggplot(top, aes(PP.H4, lab)) +
   scale_shape_manual(values = c(`TRUE` = 16, `FALSE` = 1), guide = "none") +
   scale_colour_manual(values = TIS_COL, guide = "none") +
   scale_x_continuous(limits = c(0, 1.02), breaks = seq(0, 1, 0.2)) +
-  labs(title = "B   Tests above PP.H4 0.5", x = "PP.H4", y = NULL) +
-  theme_ec(9.6) +
-  theme(axis.text.y = element_text(size = 9.6))
+  labs(title = "B   Tests above 0.5", x = "PP.H4", y = NULL) +
+  theme_ec(10.6) +
+  theme(axis.text.y = element_text(size = 10.6),
+        plot.margin = ggplot2::margin(5.5, 5.5, 5.5, 8.5, unit = "pt"))
 
 # ---------------- panel C: distinct-causal-variant posterior ---------------
 agg <- aggregate(PP.H3 ~ locus + loc_lab + tis, data = d, FUN = max)
@@ -208,9 +210,10 @@ pC <- ggplot(agg, aes(loc_lab, PP.H3)) +
                           nrow(agg), sum(agg$PP.H3 > 0.8)),
        x = "Locus (chromosome:position, Mb)",
        y = "PP.H3 (two distinct causal variants)") +
-  theme_ec(9.6) +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 9.6),
-        plot.subtitle = element_text(lineheight = 1.35))
+  theme_ec(10.6) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1, vjust = 0.5, size = 10.6),
+        plot.subtitle = element_text(lineheight = 1.35),
+        plot.margin = ggplot2::margin(5.5, 5.5, 5.5, 8.5, unit = "pt"))
 
 # One shared tissue legend under the three panels.
 leg <- get_legend(pA + theme(legend.position = "bottom",
@@ -324,8 +327,8 @@ long$set <- factor(long$set, levels = c("All programme genes",
 rho_lab <- data.frame(grp = cc$grp, lab = sprintf("\u03c1 = %+.3f", cc$rho))
 
 # Series colours follow the phenotype hierarchy fixed in the shipped figure:
-# the clamp cohort carries the gold-standard cinnabar, the diagnosed cohort the
-# azurite of the metabolic tissue, the adipose contrast the indigo of muscle.
+# the clamp cohort carries the gold-standard red, the diagnosed cohort the
+# blue of the metabolic tissue, the adipose contrast the green of muscle.
 series_col <- c(PALETTE[["uterus"]], PALETTE[["liver"]], PALETTE[["muscle"]])
 names(series_col) <- nice
 

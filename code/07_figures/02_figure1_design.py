@@ -32,10 +32,10 @@ results/figures/fig1_design.png
 Notes
 -----
 * Colours are read from PALETTE by semantic role and are never spelled out as
-  hex values here: the cinnabar band is the target organ / gold-standard
-  phenotype, the azurite band is the metabolic tissue, the indigo band is
-  muscle. Band washes are the same palette colours blended towards white, so a
-  palette change carries through the figure instead of leaving stale tints.
+  hex values here: the red band is the target organ / gold-standard phenotype,
+  the blue band is the metabolic tissue and the green band is muscle. Band
+  washes are the same palette colours blended towards white, so a palette
+  change carries through the figure instead of leaving stale tints.
 * Every size passed to matplotlib is clamped to FIGURE_MIN_PT, so the schematic
   still clears 8 pt at the 6.2 in manuscript placement.
 * The figure is drawn in a 100 x 80 data coordinate system with the axis off;
@@ -94,9 +94,9 @@ def wash(colour: str, strength: float = 0.92) -> tuple:
 
 
 # Semantic roles, resolved once from the config palette.
-SHA = CFG.PALETTE["uterus"]     # cinnabar: target organ / gold-standard phenotype
-SHI = CFG.PALETTE["liver"]      # azurite : metabolic tissue
-DIAN = CFG.PALETTE["muscle"]    # indigo  : skeletal muscle
+SHA = CFG.PALETTE["uterus"]     # red  : target organ / gold-standard phenotype
+SHI = CFG.PALETTE["liver"]      # blue : metabolic tissue
+DIAN = CFG.PALETTE["muscle"]    # green: skeletal muscle
 GREY = CFG.PALETTE["neutral"]   # neutral : reference / boundary
 
 # Structural greys belong to typography, not to the data palette: they are given
@@ -155,18 +155,18 @@ def main() -> None:
     # y origin, height, headline, band name, spine colour, wash, criteria, badge, source
     BANDS = [
         (60, 13, "862", "Layer 1  Programme definition", SHA, TINT["sha"],
-         ["FDR<0.05, |logFC|$\\geq$0.3, endometrial expression gate; 608 up / 254 down",
+         ["FDR<0.05, |logFC|≥0.3, endometrial expression gate; 608 up / 254 down",
           "preregistered, hashed, and carried unchanged into Layers 3 and 4"],
          "genes in programme", "Discovery\ncontrast"),
         (45, 13, "3 / 503", "Layer 2  Colocalisation", SHA, TINT["sha"],
-         ["Gene-locus tests across 19 loci and five tissues; PP.H4$>$0.8 threshold",
+         ["Gene-locus tests across 19 loci and five tissues; PP.H4>0.8 threshold",
           "73 of 95 locus-tissue cells testable; one signal survives a change of dataset"],
          "two at 17q21.32", "Risk GWAS\n+ cis-eQTL"),
-        (30, 13, f"$+${rho['adipose']:.2f}", "Layer 3  Bulk proxy validity", DIAN, TINT["dian"],
+        (30, 13, f"+{rho['adipose']:.2f}", "Layer 3  Bulk proxy validity", DIAN, TINT["dian"],
          ["Rank correlation with three independent cohorts",
           "adipose strong, diabetes intermediate, clamp near zero"],
          None, "(from Layer 1)"),
-        (15, 13, "$-$3.8", "Layer 4  Single-cell projection", DIAN, TINT["dian"],
+        (15, 13, "−3.8", "Layer 4  Single-cell projection", DIAN, TINT["dian"],
          ["11 samples, 141 316 cells; tumour vs normal epithelium, sample-level test",
           "against 100 matched random modules"],
          None, "(from Layer 1)"),
@@ -202,7 +202,7 @@ def main() -> None:
     y3 = 30
     base = y3 + 3.0            # zero baseline, lower part of the band
     ax.plot([66, 99], [base, base], color=RULE, lw=0.7, zorder=3)
-    ax.text(66, y3 + 12.1, "Spearman $\\rho$ with each cohort", ha="left", va="center",
+    ax.text(66, y3 + 12.1, "Spearman ρ with each cohort", ha="left", va="center",
             fontsize=pt(8), color=MUTED, zorder=3)
     PTS = []
     for accession, (name, x, colour) in COHORT_KEYS.items():
@@ -231,10 +231,11 @@ def main() -> None:
                            edgecolor="none", zorder=2))
     ax.text(4.5, 12.1, "Finding", ha="left", va="center", fontsize=pt(9.5),
             fontweight="bold", color=INK, zorder=3)
-    ax.text(4.5, 5.4, "One shared causal signal at 17q21.32, in liver (SKAP1, PP.H4 = 0.93)\n"
-                      "and muscle (0.90); the 57-variant credible set identifies a signal,\n"
+    ax.text(4.5, 5.9, "One shared causal signal at 17q21.32,\n"
+                      "in liver (SKAP1, PP.H4 = 0.93) and muscle (0.90);\n"
+                      "the 57-variant credible set identifies a signal,\n"
                       "not a variant; a third signal at 15q15.1 did not survive",
-            ha="left", va="center", fontsize=pt(8), color=BODY, linespacing=1.55, zorder=3)
+            ha="left", va="center", fontsize=pt(8), color=BODY, linespacing=1.4, zorder=3)
 
     ax.add_patch(Rectangle((64.5, 1.5), 34.7, 11.5, facecolor=PANEL,
                            edgecolor="none", zorder=0))
@@ -242,9 +243,10 @@ def main() -> None:
                            edgecolor="none", zorder=2))
     ax.text(68.2, 12.1, "Boundary", ha="left", va="center", fontsize=pt(9.5),
             fontweight="bold", color=INK, zorder=3)
-    ax.text(68.2, 5.6, "Uterine eQTL is myometrium, not epithelium;\n"
-                       "clamp cohort 51 vs 18 limits precision",
-            ha="left", va="center", fontsize=pt(8), color=BODY, linespacing=1.55, zorder=3)
+    ax.text(68.2, 5.9, "Uterine eQTL is myometrium, not\n"
+                       "epithelium; clamp cohort 51 vs 18\n"
+                       "limits precision",
+            ha="left", va="center", fontsize=pt(8), color=BODY, linespacing=1.4, zorder=3)
 
     OUT = CFG.PATHS.figures
     OUT.mkdir(parents=True, exist_ok=True)

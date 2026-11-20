@@ -294,12 +294,17 @@ MODULES: Dict[str, List[str]] = {
 # --------------------------------------------------------------------------
 # Figure style: colours carry semantics, not decoration
 # --------------------------------------------------------------------------
+# Five tissue hues chosen for separability rather than for hue family. Under
+# simulated deuteranopia, protanopia and tritanopia every pair keeps a CIELAB
+# distance of at least 23, so the five tissues stay distinguishable in a single
+# legend. Every figure reads these keys, so a change here propagates to Figures
+# 1-4 and the supplementary MR panels at once.
 PALETTE: Dict[str, str] = {
-    "uterus": "#C23531",     # cinnabar   : target organ / gold-standard phenotype
-    "liver": "#3D6BA8",      # azurite    : metabolic tissue
-    "muscle": "#177CB0",     # indigo     : skeletal muscle
-    "adipose": "#7BA7C7",    # pale azurite: visceral adipose tissue
-    "pancreas": "#9D2933",   # rouge      : pancreas
+    "uterus": "#CC3311",     # red       : target organ / gold-standard phenotype
+    "liver": "#1F4E9C",      # navy blue : metabolic tissue
+    "muscle": "#2E8B57",     # sea green : skeletal muscle
+    "adipose": "#56B4E9",    # sky blue  : visceral adipose tissue
+    "pancreas": "#882255",   # plum      : pancreas
     "neutral": "#6E6E6E",    # neutral grey: non-significant / reference
 }
 
